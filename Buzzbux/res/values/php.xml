@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_php">http://felicekarl.godohosting.com/oma/login.php</string>
+    <string name="register_php">http://felicekarl.godohosting.com/oma/register.php</string>
+    <string name="add_account_php">http://felicekarl.godohosting.com/oma/addAccount.php</string>
+    <string name="get_accounts_php">http://felicekarl.godohosting.com/oma/getAccounts.php</string>
+    <string name="get_transactions_php">http://felicekarl.godohosting.com/oma/getTransactions.php</string>
+    <string name="get_transaction_from_username_php">http://felicekarl.godohosting.com/oma/getTransactionFromUser.php</string>
+    <string name="add_transaction_php">http://felicekarl.godohosting.com/oma/addTransaction.php</string>
+    <string name="get_balance_php">http://felicekarl.godohosting.com/oma/getBalance.php</string>
+</resources>
