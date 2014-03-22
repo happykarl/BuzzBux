@@ -5,4 +5,19 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    
+    <string-array name="array_locale">
+        <item>US dollar</item>
+        <item>Korea Won</item>
+    </string-array>
+    
+    <string-array name="array_trans_type">
+        <item>DEPOSIT</item>
+        <item>WITHDRAWAL</item>
+        <item>DEBIT</item>
+        <item>CREDIT</item>
+        <item>REFUND</item>
+        <item>VOID</item>
+    </string-array>
+    
 </resources>

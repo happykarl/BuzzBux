@@ -1,10 +1,15 @@
 package com.felicekarl.buzzbux.models;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import android.util.Log;
+
 public class Money {
-	private int value;
+	private static final String TAG = Money.class.getSimpleName();
+	
+	private int value = 0;
 	private Locale locale;
 	
 	public Money(Locale locale, int value) {
@@ -29,11 +34,15 @@ public class Money {
 	}
 	
 	public String toString() {
+		Log.d(TAG, "locale.toString(): " + locale.toString());
+		Log.d(TAG, "Locale.US: " + Locale.US.toString());
 		NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
+		String symbol = nf.getCurrency().getSymbol();
+		DecimalFormat df = new DecimalFormat(symbol + "#,##0.00;-" + symbol + "#,##0.00");
 		if (locale.equals(Locale.US)) {
-			return nf.format(value/100.0f);
+			return df.format(value/100.0f);
 		} else if (locale.equals(Locale.KOREA)) {
-			return nf.format(value);
+			return df.format(value);
 		}
 		return null;
 	}

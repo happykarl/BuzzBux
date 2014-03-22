@@ -53,6 +53,10 @@ public class User {
 		return this.list.remove(item);
 	}
 	
+	public void removeAllAccounts() {
+		list = new ArrayList<Account>();
+	}
+	
 	public ArrayList<Account> getAccounts() {
 		return list;
 	}

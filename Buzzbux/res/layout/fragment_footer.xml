@@ -34,6 +34,20 @@
 	            android:layout_height="60dp"
 	            android:background="@null"
 	            android:drawableLeft="@drawable/bt_add" />
+	        
+	        <Button
+	            android:id="@+id/bt_footer_edit"
+	            android:layout_width="60dp"
+	            android:layout_height="60dp"
+	            android:background="@null"
+	            android:drawableLeft="@drawable/bt_edit" />
+	        
+	        <Button
+	            android:id="@+id/bt_footer_delete"
+	            android:layout_width="60dp"
+	            android:layout_height="60dp"
+	            android:background="@null"
+	            android:drawableLeft="@drawable/bt_delete" />
 	
 	        <Button
 	            android:id="@+id/bt_footer_setting"

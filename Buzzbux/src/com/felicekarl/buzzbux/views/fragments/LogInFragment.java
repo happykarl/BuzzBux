@@ -77,8 +77,8 @@ public class LogInFragment extends BaseFragment implements OnClickListener, Upda
 		//view.setTranslationY(-height);
     	et_username.setText(username);
 		
-    	bt_list.add(bt_login);
-		bt_list.add(bt_register);
+    	view_list.add(bt_login);
+    	view_list.add(bt_register);
     	et_list.add(et_username);
     	et_list.add(et_password);
 		et_username.setFocusable(false);
@@ -154,18 +154,18 @@ public class LogInFragment extends BaseFragment implements OnClickListener, Upda
 	
 	@Override
 	public void enableButtonListener() {
-		if (bt_list != null) {
-			for (Button bt : bt_list) {
-				bt.setOnClickListener(this);
+		if (view_list != null) {
+			for (View v : view_list) {
+				v.setOnClickListener(this);
 			}
 		}
 	}
 	
 	@Override
 	public void disableButtonListener() {
-		if (bt_list != null) {
-			for (Button bt : bt_list) {
-				bt.setOnClickListener(null);
+		if (view_list != null) {
+			for (View v : view_list) {
+				v.setOnClickListener(null);
 			}
 		}
 	}

@@ -9,7 +9,7 @@
 	$con=mysql_connect("$host", "$username", "$password")or die("cannot connect");
 	mysql_select_db("$db_name")or die("cannot select DB");
 	
-	$sql = "SELECT * FROM `felicekarl_godohosting_com`.`oma_transaction` WHERE bankaccountid='".$paramAccountId."' ORDER BY `oma_transaction`.`index` ASC";
+	$sql = "SELECT * FROM `felicekarl_godohosting_com`.`oma_transaction` WHERE parentaccount='".$paramAccountId."' ORDER BY `oma_transaction`.`index` ASC";
 	$result = mysql_query($sql);
 	$json = array();
 	 

@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="#eee"
     android:orientation="vertical"
-    android:paddingTop="80dp" >
+    android:paddingTop="80dp"
+    android:paddingBottom="40dp" >
 
     <LinearLayout
         android:id="@+id/bgLayout2"

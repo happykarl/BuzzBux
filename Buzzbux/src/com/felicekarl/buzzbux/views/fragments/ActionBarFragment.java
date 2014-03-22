@@ -9,12 +9,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ActionBarFragment extends BaseFragment implements Runnable {
+public class ActionBarFragment extends BaseFragment implements Runnable, OnClickListener {
 	private static final String TAG = ActionBarFragment.class.getSimpleName();
 	
 	private AnimationDrawable mAnimationDrawable; 
@@ -49,6 +50,7 @@ public class ActionBarFragment extends BaseFragment implements Runnable {
 		iv_menu = (ImageView) view.findViewById(R.id.iv_menu);
         
 		iv_menu.setBackgroundResource(R.drawable.bt_menu);
+		iv_menu.setOnClickListener(this);
 		
 		slideUpFragment();
     	
@@ -134,6 +136,21 @@ public class ActionBarFragment extends BaseFragment implements Runnable {
 					}
 		    	});
 			}
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (iView != null)	iView.closeMenu();
+		closeVirtualKeyboard();
+		switch(v.getId()) {
+		case R.id.iv_menu:
+			if (iView.getView().equals(TypeView.MANAGETRANSACTION)) {
+				iView.setView(TypeView.MANAGEACCOUNT);
+			} else if (iView.getView().equals(TypeView.MANAGEACCOUNT)) {
+				iView.setView(TypeView.DASHBOARD);
+			}
+			break;
 		}
 	}
 }

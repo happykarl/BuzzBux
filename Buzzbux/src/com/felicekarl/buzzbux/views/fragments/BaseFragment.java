@@ -7,6 +7,7 @@ import com.felicekarl.buzzbux.views.IView;
 
 import android.app.Fragment;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -25,18 +26,16 @@ public abstract class BaseFragment extends Fragment {
 	protected int height;
 	protected static int ANIM_SLIDE_DURATION = 500;
 	protected boolean isOnStage;
+	protected List<View> view_list;
 	protected List<EditText> et_list;
-	protected List<Button> bt_list;
-	protected List<LinearLayout> ll_list;
 	
 	public enum DIRECTION {
 		TOP, BOTTOM, LEFT, RIGHT
 	}
 	
 	public BaseFragment() {
+		view_list = new ArrayList<View>();
 		et_list = new ArrayList<EditText>();
-		bt_list = new ArrayList<Button>();
-		ll_list = new ArrayList<LinearLayout>();
 	}
 	
 	public void setIView(IView iView) {

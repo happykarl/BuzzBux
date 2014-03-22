@@ -19,4 +19,18 @@ public class TransTypeParser {
 		}
 		return null;
 	}
+	
+	public static String parseSign(TransType type) {
+		// add 
+		if ( type.equals(TransType.DEPOSIT) || type.equals(TransType.REFUND) ) {
+			return "0";
+		// substract
+		} else if ( type.equals(TransType.WITHDRAWAL) || 
+				type.equals(TransType.DEBIT) ||
+				type.equals(TransType.CREDIT) || 
+				type.equals(TransType.VOID) ) {
+			return "1";
+		}
+		return null;
+	}
 }

@@ -5,30 +5,91 @@
     android:layout_height="match_parent"
     android:background="#eee"
     android:orientation="vertical"
-    android:paddingTop="80dp" >
+    android:paddingTop="80dp"
+    android:paddingBottom="30dp" >
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/bgLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"
         android:orientation="vertical" >
-
-        <LinearLayout
-            android:id="@+id/bgLayout3"
+        
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:background="#222"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:padding="2dp" >
 
-            <ListView
-                android:id="@+id/lv_list_transaction"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@null" >
-            </ListView>
+                android:layout_height="wrap_content"
+                android:background="#eee"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="left|center"
+                android:padding="10dp"
+                android:text="Balance"
+                android:textColor="#000"
+                android:textSize="30sp"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/tv_balance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="right|center"
+                android:padding="10dp"
+                android:text="$100,000"
+                android:textColor="#000"
+                android:textSize="30sp"
+                android:textStyle="bold|italic" />
+        </FrameLayout>
+        
+        <FrameLayout
+	        android:id="@+id/bgLayout3"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:padding="10dp"
+			android:layout_marginTop="80dp"
+			android:layout_marginBottom="80dp"
+	        android:orientation="vertical" >
             
+            <ListView
+	            android:id="@+id/lv_list_transaction"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:gravity="bottom|center"
+	            
+	            android:background="@null" />
+		</FrameLayout>
+
+        
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="bottom|center"
+            android:background="#222"
+            android:orientation="vertical"
+            android:padding="2dp" >
+
+            <Button
+                android:id="@+id/bt_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#eee"
+                android:fontFamily="sans-serif-condensed"
+                android:padding="10dp"
+                android:text="Delete Account"
+                android:textColor="#a20025"
+                android:textSize="30sp"
+                android:textStyle="bold|italic" />
         </LinearLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
 </FrameLayout>

@@ -2,10 +2,16 @@ package com.felicekarl.buzzbux.views;
 
 import com.felicekarl.buzzbux.R;
 import com.felicekarl.buzzbux.activities.MainActivity;
+import com.felicekarl.buzzbux.listeners.AddAccountFragmentButtonListener;
+import com.felicekarl.buzzbux.listeners.AddTransactionFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.DashboardFragmentButtonListener;
+import com.felicekarl.buzzbux.listeners.EditTransactionFragmentButtonListener;
+import com.felicekarl.buzzbux.listeners.FooterFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.LogInFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.ManageAccountFragmentButtonListener;
+import com.felicekarl.buzzbux.listeners.ManageTransactionFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.RegisterFragmentButtonListener;
+import com.felicekarl.buzzbux.models.Transaction;
 import com.felicekarl.buzzbux.views.fragments.*;
 import com.felicekarl.buzzbux.views.fragments.BaseFragment.DIRECTION;
 
@@ -27,6 +33,9 @@ public class MainView implements IView {
 	private RegisterFragment mRegisterFragment;
 	private ManageAccountFragment mManageAccountFragment;
 	private ManageTransactionFragment mManageTransactionFragment;
+	private AddAccountFragment mAddAccountFragment;
+	private AddTransactionFragment mAddTransactionFragment;
+	private EditTransactionFragment mEditTransactionFragment;
 	
 	public MainView(Context context) {
 		this.mFragmentManager = ((MainActivity) context).getFragmentManager();
@@ -43,10 +52,25 @@ public class MainView implements IView {
 		mManageAccountFragment.setIView(this);
 		mFragmentManager.beginTransaction().add(R.id.main, mManageAccountFragment).commit();
 		
+		/* add add account fragment */
+		mAddAccountFragment = AddAccountFragment.create();
+		mAddAccountFragment.setIView(this);
+		mFragmentManager.beginTransaction().add(R.id.main, mAddAccountFragment).commit();
+		
 		/* add manage transaction fragment */
 		mManageTransactionFragment = ManageTransactionFragment.create();
 		mManageTransactionFragment.setIView(this);
 		mFragmentManager.beginTransaction().add(R.id.main, mManageTransactionFragment).commit();
+		
+		/* add add transaction fragment */
+		mAddTransactionFragment = AddTransactionFragment.create();
+		mAddTransactionFragment.setIView(this);
+		mFragmentManager.beginTransaction().add(R.id.main, mAddTransactionFragment).commit();
+		
+		/* add edit transaction fragment */
+		mEditTransactionFragment = EditTransactionFragment.create();
+		mEditTransactionFragment.setIView(this);
+		mFragmentManager.beginTransaction().add(R.id.main, mEditTransactionFragment).commit();
 		
 		/* add login fragment */
 		mLogInFragment = LogInFragment.create("admin");
@@ -86,6 +110,11 @@ public class MainView implements IView {
 			mRegisterFragment.disableButtonListener();
 			mManageAccountFragment.disableButtonListener();
 			mManageTransactionFragment.disableButtonListener();
+			mAddAccountFragment.disableButtonListener();
+			mAddTransactionFragment.disableButtonListener();
+			mEditTransactionFragment.disableButtonListener();
+			
+			closeMenu();
 			
 			if (curTypeView.equals(TypeView.SPLASH) && type.equals(TypeView.LOGIN)) {
 				mSplashFragment.toggle(false, true, DIRECTION.BOTTOM);
@@ -96,6 +125,9 @@ public class MainView implements IView {
 				mRegisterFragment.toggle(false, false, DIRECTION.TOP);
 				mManageAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mManageTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mLogInFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.LOGIN) && type.equals(TypeView.DASHBOARD)) {
@@ -107,6 +139,9 @@ public class MainView implements IView {
 				mRegisterFragment.toggle(false, false, DIRECTION.TOP);
 				mManageAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mManageTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mDashboardFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.LOGIN) && type.equals(TypeView.REGISTER)) {
@@ -118,6 +153,9 @@ public class MainView implements IView {
 				mRegisterFragment.toggle(true, true, DIRECTION.BOTTOM);
 				mManageAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mManageTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mRegisterFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.REGISTER) && type.equals(TypeView.LOGIN)) {
@@ -129,6 +167,9 @@ public class MainView implements IView {
 				mRegisterFragment.toggle(false, true, DIRECTION.BOTTOM);
 				mManageAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mManageTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mLogInFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.REGISTER) && type.equals(TypeView.DASHBOARD)) {
@@ -140,6 +181,9 @@ public class MainView implements IView {
 				mRegisterFragment.toggle(false, true, DIRECTION.BOTTOM);
 				mManageAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mManageTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mDashboardFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.DASHBOARD) && type.equals(TypeView.MANAGEACCOUNT)) {
@@ -150,11 +194,55 @@ public class MainView implements IView {
 				mDashboardFragment.toggle(false, true, DIRECTION.LEFT);
 				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
 				mManageAccountFragment.toggle(true, true, DIRECTION.RIGHT);
-				mManageTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				//mManageTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				
+				mManageAccountFragment.resetFragment();
+			} else if (curTypeView.equals(TypeView.MANAGEACCOUNT) && type.equals(TypeView.DASHBOARD)) {
+				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mLogInFragment.toggle(false, false, DIRECTION.TOP);
+				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
+				mFooterFragment.toggle(false, true, DIRECTION.BOTTOM);
+				mDashboardFragment.toggle(true, true, DIRECTION.LEFT);
+				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mManageAccountFragment.toggle(false, true, DIRECTION.RIGHT);
+				//mManageTransactionFragment.toggle(false, false, DIRECTION.RIGHT);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				
+				mDashboardFragment.resetFragment();
+			} else if (curTypeView.equals(TypeView.MANAGEACCOUNT) && type.equals(TypeView.ADDACCOUNT)) {
+				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mLogInFragment.toggle(false, false, DIRECTION.TOP);
+				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
+				mFooterFragment.toggle(false, true, DIRECTION.BOTTOM);
+				mDashboardFragment.toggle(false, false, DIRECTION.LEFT);
+				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mManageAccountFragment.toggle(true, false, DIRECTION.RIGHT);
+				//mManageTransactionFragment.toggle(false, false, DIRECTION.RIGHT);
+				mAddAccountFragment.toggle(true, true, DIRECTION.BOTTOM);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				
+				mAddAccountFragment.resetFragment();
+			} else if (curTypeView.equals(TypeView.ADDACCOUNT) && type.equals(TypeView.MANAGEACCOUNT)) {
+				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mLogInFragment.toggle(false, false, DIRECTION.TOP);
+				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
+				mFooterFragment.toggle(true, true, DIRECTION.BOTTOM);
+				mDashboardFragment.toggle(false, false, DIRECTION.LEFT);
+				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mManageAccountFragment.toggle(true, false, DIRECTION.RIGHT);
+				//mManageTransactionFragment.toggle(false, false, DIRECTION.RIGHT);
+				mAddAccountFragment.toggle(false, true, DIRECTION.BOTTOM);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mManageAccountFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.MANAGEACCOUNT) && type.equals(TypeView.MANAGETRANSACTION)) {
-				Log.d(TAG, "MANAGEACCOUNT -> MANAGETRANSACTION");
 				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
 				mLogInFragment.toggle(false, false, DIRECTION.TOP);
 				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
@@ -163,6 +251,79 @@ public class MainView implements IView {
 				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
 				mManageAccountFragment.toggle(false, true, DIRECTION.LEFT);
 				mManageTransactionFragment.toggle(true, true, DIRECTION.RIGHT);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				
+				mManageTransactionFragment.resetFragment();
+			} else if (curTypeView.equals(TypeView.MANAGETRANSACTION) && type.equals(TypeView.MANAGEACCOUNT)) {
+				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mLogInFragment.toggle(false, false, DIRECTION.TOP);
+				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
+				mFooterFragment.toggle(true, false, DIRECTION.BOTTOM);
+				mDashboardFragment.toggle(false, false, DIRECTION.LEFT);
+				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mManageAccountFragment.toggle(true, true, DIRECTION.LEFT);
+				mManageTransactionFragment.toggle(false, true, DIRECTION.RIGHT);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				
+				mManageAccountFragment.resetFragment();
+			} else if (curTypeView.equals(TypeView.MANAGETRANSACTION) && type.equals(TypeView.ADDTRANSACTION)) {
+				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mLogInFragment.toggle(false, false, DIRECTION.TOP);
+				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
+				mFooterFragment.toggle(false, true, DIRECTION.BOTTOM);
+				mDashboardFragment.toggle(false, false, DIRECTION.LEFT);
+				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mManageAccountFragment.toggle(false, false, DIRECTION.LEFT);
+				mManageTransactionFragment.toggle(true, false, DIRECTION.RIGHT);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(true, true, DIRECTION.BOTTOM);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				
+				mAddTransactionFragment.resetFragment();
+			} else if (curTypeView.equals(TypeView.ADDTRANSACTION) && type.equals(TypeView.MANAGETRANSACTION)) {
+				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mLogInFragment.toggle(false, false, DIRECTION.TOP);
+				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
+				mFooterFragment.toggle(true, true, DIRECTION.BOTTOM);
+				mDashboardFragment.toggle(false, false, DIRECTION.LEFT);
+				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mManageAccountFragment.toggle(false, false, DIRECTION.LEFT);
+				mManageTransactionFragment.toggle(true, false, DIRECTION.RIGHT);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, true, DIRECTION.BOTTOM);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				
+				mManageTransactionFragment.resetFragment();
+			} else if (curTypeView.equals(TypeView.MANAGETRANSACTION) && type.equals(TypeView.EDITTRANSACTION)) {
+				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mLogInFragment.toggle(false, false, DIRECTION.TOP);
+				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
+				mFooterFragment.toggle(false, true, DIRECTION.BOTTOM);
+				mDashboardFragment.toggle(false, false, DIRECTION.LEFT);
+				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mManageAccountFragment.toggle(false, false, DIRECTION.LEFT);
+				mManageTransactionFragment.toggle(true, false, DIRECTION.RIGHT);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mEditTransactionFragment.toggle(true, true, DIRECTION.BOTTOM);
+				
+				mEditTransactionFragment.resetFragment();
+			} else if (curTypeView.equals(TypeView.EDITTRANSACTION) && type.equals(TypeView.MANAGETRANSACTION)) {
+				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mLogInFragment.toggle(false, false, DIRECTION.TOP);
+				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
+				mFooterFragment.toggle(true, true, DIRECTION.BOTTOM);
+				mDashboardFragment.toggle(false, false, DIRECTION.LEFT);
+				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mManageAccountFragment.toggle(false, false, DIRECTION.LEFT);
+				mManageTransactionFragment.toggle(true, false, DIRECTION.RIGHT);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mEditTransactionFragment.toggle(false, true, DIRECTION.BOTTOM);
 				
 				mManageTransactionFragment.resetFragment();
 			}
@@ -208,6 +369,12 @@ public class MainView implements IView {
 			mLogInFragment.enableButtonListener();
 		} else if (curTypeView.equals(TypeView.REGISTER)) {
 			mRegisterFragment.enableButtonListener();
+		} else if (curTypeView.equals(TypeView.DASHBOARD)) {
+			mDashboardFragment.enableButtonListener();
+		} else if (curTypeView.equals(TypeView.MANAGEACCOUNT)) {
+			mManageAccountFragment.enableButtonListener();
+		} else if (curTypeView.equals(TypeView.MANAGETRANSACTION)) {
+			mManageTransactionFragment.enableButtonListener();
 		}
 	}
 
@@ -224,6 +391,11 @@ public class MainView implements IView {
 	@Override
 	public void stopSpinner() {
 		mActionBarFragment.stopSpinner();
+	}
+	
+	@Override
+	public void openMenu() {
+		mFooterFragment.openMenu();
 	}
 
 	@Override
@@ -247,6 +419,68 @@ public class MainView implements IView {
 	public ListView getManageTransactionListView() {
 		return mManageTransactionFragment.getListView();
 	}
+
+	@Override
+	public void updateFooterFragmentButtonListener(
+			FooterFragmentButtonListener mFooterFragmentButtonListener) {
+		mFooterFragment.updateFooterFragmentButtonListener(mFooterFragmentButtonListener);
+	}
+
+	@Override
+	public void updateAddAccountFragmentButtonListener(
+			AddAccountFragmentButtonListener mAddAccountFragmentButtonListener) {
+		mAddAccountFragment.updateAddAccountFragmentButtonListener(mAddAccountFragmentButtonListener);
+	}
+
+	@Override
+	public void setAddAccountErrorMsg(String msg) {
+		mAddAccountFragment.setErrorMsg(msg);
+	}
+
+	@Override
+	public void updateAddTransactionFragmentButtonListener(
+			AddTransactionFragmentButtonListener mAddTransactionFragmentButtonListener) {
+		mAddTransactionFragment.updateAddTransactionFragmentButtonListener(mAddTransactionFragmentButtonListener);
+	}
+
+	@Override
+	public void setAddTransactionErrorMsg(String msg) {
+		mAddTransactionFragment.setErrorMsg(msg);
+	}
+
+	@Override
+	public void setAddTransactionCurrency(String currency) {
+		mAddTransactionFragment.setCurrency(currency);
+	}
+
+	@Override
+	public void updateManageTransactionFragmentButtonListener(
+			ManageTransactionFragmentButtonListener mManageTransactionFragmentButtonListener) {
+		mManageTransactionFragment.updateManageTransactionFragmentButtonListener(mManageTransactionFragmentButtonListener);
+	}
+
+	@Override
+	public void updateEditTransactionFragmentButtonListener(
+			EditTransactionFragmentButtonListener mEditTransactionFragmentButtonListener) {
+		mEditTransactionFragment.updateEditTransactionFragmentButtonListener(mEditTransactionFragmentButtonListener);
+	}
+
+	@Override
+	public void fillEditTransactionForm(Transaction transaction) {
+		mEditTransactionFragment.fillEditTransactionForm(transaction);
+	}
+
+	@Override
+	public void setEditTransactionCurrency(String currency) {
+		mEditTransactionFragment.setCurrency(currency);
+	}
+
+	@Override
+	public void setManageTransactionBalance(String balance) {
+		mManageTransactionFragment.setBalance(balance);
+	}
+
+	
 
 	
 

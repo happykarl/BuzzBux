@@ -14,9 +14,12 @@ public class FooterFragment extends BaseFragment implements OnClickListener,
 		UpdateFooterFragmentButtonListener {
 	private static final String TAG = FooterFragment.class.getSimpleName();
 	
-	protected static int ANIM_SLIDE_DURATION = 100;
+	protected static int ANIM_SLIDE_DURATION = 300;
 	private boolean isOpen = false;
 	private Button bt_footer_popup;
+	private Button bt_footer_add;
+	private Button bt_footer_edit;
+	private Button bt_footer_delete;
 	
 	private FooterFragmentButtonListener mFooterFragmentButtonListener;
 	
@@ -40,6 +43,17 @@ public class FooterFragment extends BaseFragment implements OnClickListener,
 		
 		bt_footer_popup = (Button) view.findViewById(R.id.bt_footer_popup);
 		bt_footer_popup.setOnClickListener(this);
+		bt_footer_add = (Button) view.findViewById(R.id.bt_footer_add);
+		bt_footer_add.setOnClickListener(this);
+		bt_footer_edit = (Button) view.findViewById(R.id.bt_footer_edit);
+		bt_footer_edit.setOnClickListener(this);
+		bt_footer_delete = (Button) view.findViewById(R.id.bt_footer_delete);
+		bt_footer_delete.setOnClickListener(this);
+		
+		bt_footer_delete.setVisibility(View.INVISIBLE);
+		
+		view_list.add(bt_footer_popup);
+		view_list.add(bt_footer_add);
 		
 		slideUpFragment();
     	
@@ -73,7 +87,7 @@ public class FooterFragment extends BaseFragment implements OnClickListener,
 				}
 			} else {
 				view.animate().translationX(0).setDuration(0).withLayer();
-				view.animate().translationY(0).setDuration(0).withLayer();
+				view.animate().translationY(70).setDuration(ANIM_SLIDE_DURATION).withLayer();
 			}
     		enableEditText();
     	} else {
@@ -126,10 +140,22 @@ public class FooterFragment extends BaseFragment implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
+		closeVirtualKeyboard();
 		switch(v.getId()) {
 		case R.id.bt_footer_popup:
 			toogleMenu();
 			break;
+		case R.id.bt_footer_add:
+			if (mFooterFragmentButtonListener != null) {
+				mFooterFragmentButtonListener.addItem();
+			}
+			closeMenu();
+			break;
+		case R.id.bt_footer_edit:
+			if (mFooterFragmentButtonListener != null) {
+				mFooterFragmentButtonListener.editItem();
+			}
+			closeMenu();
 		}
 	}
 	
@@ -155,6 +181,20 @@ public class FooterFragment extends BaseFragment implements OnClickListener,
 		    			}
 		    		});
 				}
+			}
+		}
+	}
+	
+	public void openMenu() {
+		if (!isOpen) {
+			if (getActivity() != null && getView() != null) {
+	    		getActivity().runOnUiThread(new Runnable(){
+	    			@Override
+	    			public void run() {
+						view.animate().translationY(0).setDuration(ANIM_SLIDE_DURATION).withLayer();
+						isOpen = true;
+	    			}
+	    		});
 			}
 		}
 	}
@@ -190,5 +230,7 @@ public class FooterFragment extends BaseFragment implements OnClickListener,
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 }

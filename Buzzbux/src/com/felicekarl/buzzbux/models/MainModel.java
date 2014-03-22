@@ -1,6 +1,7 @@
 package com.felicekarl.buzzbux.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 
@@ -10,6 +11,7 @@ public class MainModel implements IModel {
 	private Context context;
 	private User curUser;
 	private Account curAccount;
+	private Transaction curTransaction;
 
 	public MainModel(Context context) {
 		this.context = context;
@@ -33,5 +35,18 @@ public class MainModel implements IModel {
 	@Override
 	public Account getCurAccount() {
 		return curAccount;
+	}
+	@Override
+	public void setCurTransaction(Transaction transaction) {
+		curTransaction = transaction;
+	}
+	@Override
+	public Transaction getCurTransaction() {
+		return curTransaction;
+	}
+	@Override
+	public boolean deleteTransaction(Account account, Transaction transaction) {
+		ArrayList<Transaction> list = (ArrayList<Transaction>) account.getTransactions();
+		return list.remove(transaction);
 	}
 }

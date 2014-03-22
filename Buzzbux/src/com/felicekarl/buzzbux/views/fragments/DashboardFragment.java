@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 public class DashboardFragment extends BaseFragment implements OnClickListener,
 		UpdateDashboardFragmentButtonListener {
-	private static final String TAG = DashboardFragment.class.getName();
+	private static final String TAG = DashboardFragment.class.getSimpleName();
 	
 	private LinearLayout ll_manager_user;
 	private LinearLayout ll_manager_account;
@@ -51,10 +51,10 @@ public class DashboardFragment extends BaseFragment implements OnClickListener,
 		ll_settings = (LinearLayout) view.findViewById(R.id.ll_settings);
 		ll_settings.setOnClickListener(this);
 		
-		ll_list.add(ll_manager_user);
-		ll_list.add(ll_manager_account);
-		ll_list.add(ll_report_transaction);
-		ll_list.add(ll_settings);
+		view_list.add(ll_manager_user);
+		view_list.add(ll_manager_account);
+		view_list.add(ll_report_transaction);
+		view_list.add(ll_settings);
 		
 		slideUpFragment();
     	
@@ -74,30 +74,27 @@ public class DashboardFragment extends BaseFragment implements OnClickListener,
 	@Override
 	public void onClick(View v) {
 		if (iView != null)	iView.closeMenu();
+		disableButtonListener();
 		closeVirtualKeyboard();
 		switch(v.getId()) {
 		case R.id.ll_manager_user:
 			if (mDashboardFragmentButtonListener != null) {
 				mDashboardFragmentButtonListener.submitManageUser();
-				disableButtonListener();
 			}
 			break;
 		case R.id.ll_manager_account:
 			if (mDashboardFragmentButtonListener != null) {
 				mDashboardFragmentButtonListener.submitManageAccount();
-				disableButtonListener();
 			}
 			break;
 		case R.id.ll_report_transaction:
 			if (mDashboardFragmentButtonListener != null) {
 				mDashboardFragmentButtonListener.submitReportTransaction();
-				disableButtonListener();
 			}
 			break;
 		case R.id.ll_settings:
 			if (mDashboardFragmentButtonListener != null) {
 				mDashboardFragmentButtonListener.submitSettings();
-				disableButtonListener();
 			}
 			break;
 		}	
@@ -116,18 +113,19 @@ public class DashboardFragment extends BaseFragment implements OnClickListener,
 
 	@Override
 	public void enableButtonListener() {
-		if (ll_list != null) {
-			for (LinearLayout ll : ll_list) {
-				ll.setOnClickListener(this);
+		Log.d(TAG, "enableButtonListener");
+		if (view_list != null) {
+			for (View v : view_list) {
+				v.setOnClickListener(this);
 			}
 		}
 	}
 	
 	@Override
 	public void disableButtonListener() {
-		if (ll_list != null) {
-			for (LinearLayout ll : ll_list) {
-				ll.setOnClickListener(null);
+		if (view_list != null) {
+			for (View v : view_list) {
+				v.setOnClickListener(null);
 			}
 		}
 	}

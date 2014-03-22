@@ -8,6 +8,10 @@
 package com.felicekarl.buzzbux;
 
 public final class R {
+    public static final class array {
+        public static final int array_locale=0x7f060000;
+        public static final int array_trans_type=0x7f060001;
+    }
     public static final class attr {
     }
     public static final class dimen {
@@ -24,84 +28,103 @@ public final class R {
     public static final class drawable {
         public static final int bt_add=0x7f020000;
         public static final int bt_back=0x7f020001;
-        public static final int bt_menu=0x7f020002;
-        public static final int bt_popup=0x7f020003;
-        public static final int bt_refresh=0x7f020004;
-        public static final int bt_search=0x7f020005;
-        public static final int bt_setting=0x7f020006;
-        public static final int bt_spinner1=0x7f020007;
-        public static final int bt_spinner2=0x7f020008;
-        public static final int bt_spinner3=0x7f020009;
-        public static final int bt_spinner4=0x7f02000a;
-        public static final int bt_user=0x7f02000b;
-        public static final int ic_launcher=0x7f02000c;
-        public static final int pb_menu=0x7f02000d;
+        public static final int bt_delete=0x7f020002;
+        public static final int bt_edit=0x7f020003;
+        public static final int bt_menu=0x7f020004;
+        public static final int bt_popup=0x7f020005;
+        public static final int bt_refresh=0x7f020006;
+        public static final int bt_search=0x7f020007;
+        public static final int bt_setting=0x7f020008;
+        public static final int bt_spinner1=0x7f020009;
+        public static final int bt_spinner2=0x7f02000a;
+        public static final int bt_spinner3=0x7f02000b;
+        public static final int bt_spinner4=0x7f02000c;
+        public static final int bt_user=0x7f02000d;
+        public static final int ic_launcher=0x7f02000e;
+        public static final int pb_menu=0x7f02000f;
     }
     public static final class id {
-        public static final int action_settings=0x7f080024;
-        public static final int bgLayout1=0x7f080006;
-        public static final int bgLayout2=0x7f080007;
-        public static final int bgLayout3=0x7f080008;
-        public static final int bgLayout4=0x7f080009;
-        public static final int bt_cancel=0x7f080023;
-        public static final int bt_footer_add=0x7f08000f;
-        public static final int bt_footer_popup=0x7f080011;
-        public static final int bt_footer_refresh=0x7f08000e;
-        public static final int bt_footer_setting=0x7f080010;
-        public static final int bt_login=0x7f080014;
-        public static final int bt_register=0x7f080016;
-        public static final int bt_submit=0x7f080022;
-        public static final int bt_user=0x7f080004;
-        public static final int et_firstname=0x7f080020;
-        public static final int et_lastname=0x7f080021;
-        public static final int et_password=0x7f080013;
-        public static final int et_username=0x7f080012;
-        public static final int iv_menu=0x7f080003;
-        public static final int layout_background=0x7f080002;
-        public static final int ll_manager_account=0x7f08000b;
-        public static final int ll_manager_user=0x7f08000a;
-        public static final int ll_report_transaction=0x7f08000c;
-        public static final int ll_settings=0x7f08000d;
-        public static final int lv_list_account=0x7f080017;
-        public static final int lv_list_transaction=0x7f08001b;
-        public static final int main=0x7f080000;
-        public static final int textView1=0x7f080001;
-        public static final int tv_account_balance=0x7f080019;
-        public static final int tv_account_description=0x7f08001a;
-        public static final int tv_account_name=0x7f080018;
-        public static final int tv_amount=0x7f08001d;
-        public static final int tv_date=0x7f08001f;
-        public static final int tv_description=0x7f08001e;
-        public static final int tv_error=0x7f080015;
-        public static final int tv_title=0x7f080005;
-        public static final int tv_trnas_type=0x7f08001c;
+        public static final int action_settings=0x7f090030;
+        public static final int bgLayout1=0x7f090006;
+        public static final int bgLayout2=0x7f090007;
+        public static final int bgLayout3=0x7f090008;
+        public static final int bgLayout4=0x7f090009;
+        public static final int bt_cancel=0x7f09000f;
+        public static final int bt_delete=0x7f090019;
+        public static final int bt_footer_add=0x7f09001b;
+        public static final int bt_footer_delete=0x7f09001d;
+        public static final int bt_footer_edit=0x7f09001c;
+        public static final int bt_footer_popup=0x7f09001f;
+        public static final int bt_footer_refresh=0x7f09001a;
+        public static final int bt_footer_setting=0x7f09001e;
+        public static final int bt_login=0x7f090022;
+        public static final int bt_register=0x7f090023;
+        public static final int bt_submit=0x7f09000d;
+        public static final int bt_user=0x7f090004;
+        public static final int dp_date=0x7f090014;
+        public static final int et_account_description=0x7f09000b;
+        public static final int et_account_name=0x7f09000a;
+        public static final int et_firstname=0x7f09002e;
+        public static final int et_lastname=0x7f09002f;
+        public static final int et_password=0x7f090021;
+        public static final int et_trans_amount=0x7f090012;
+        public static final int et_trans_description=0x7f090013;
+        public static final int et_username=0x7f090020;
+        public static final int iv_menu=0x7f090003;
+        public static final int layout_background=0x7f090002;
+        public static final int ll_manager_account=0x7f090016;
+        public static final int ll_manager_user=0x7f090015;
+        public static final int ll_report_transaction=0x7f090017;
+        public static final int ll_settings=0x7f090018;
+        public static final int lv_list_account=0x7f090024;
+        public static final int lv_list_transaction=0x7f090029;
+        public static final int main=0x7f090000;
+        public static final int sp_locale=0x7f09000c;
+        public static final int sp_trans_type=0x7f090010;
+        public static final int textView1=0x7f090001;
+        public static final int tv_account_balance=0x7f090026;
+        public static final int tv_account_description=0x7f090027;
+        public static final int tv_account_name=0x7f090025;
+        public static final int tv_amount=0x7f09002b;
+        public static final int tv_balance=0x7f090028;
+        public static final int tv_currency=0x7f090011;
+        public static final int tv_date=0x7f09002d;
+        public static final int tv_description=0x7f09002c;
+        public static final int tv_error=0x7f09000e;
+        public static final int tv_title=0x7f090005;
+        public static final int tv_trnas_type=0x7f09002a;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int fragment_actionbar=0x7f030001;
-        public static final int fragment_dashboard=0x7f030002;
-        public static final int fragment_footer=0x7f030003;
-        public static final int fragment_login=0x7f030004;
-        public static final int fragment_manage_account=0x7f030005;
-        public static final int fragment_manage_account_item=0x7f030006;
-        public static final int fragment_manage_transaction=0x7f030007;
-        public static final int fragment_manage_transaction_item=0x7f030008;
-        public static final int fragment_register=0x7f030009;
-        public static final int fragment_splash=0x7f03000a;
+        public static final int fragment_add_account=0x7f030002;
+        public static final int fragment_add_transaction=0x7f030003;
+        public static final int fragment_dashboard=0x7f030004;
+        public static final int fragment_edit_transaction=0x7f030005;
+        public static final int fragment_footer=0x7f030006;
+        public static final int fragment_login=0x7f030007;
+        public static final int fragment_manage_account=0x7f030008;
+        public static final int fragment_manage_account_item=0x7f030009;
+        public static final int fragment_manage_transaction=0x7f03000a;
+        public static final int fragment_manage_transaction_item=0x7f03000b;
+        public static final int fragment_register=0x7f03000c;
+        public static final int fragment_splash=0x7f03000d;
     }
     public static final class menu {
-        public static final int main=0x7f070000;
+        public static final int main=0x7f080000;
     }
     public static final class string {
-        public static final int action_settings=0x7f05000a;
+        public static final int action_settings=0x7f05000c;
         public static final int add_account_php=0x7f050002;
         public static final int add_transaction_php=0x7f050006;
-        public static final int app_name=0x7f050008;
+        public static final int app_name=0x7f05000a;
+        public static final int delete_transaction_php=0x7f050009;
+        public static final int edit_transaction_php=0x7f050008;
         public static final int get_accounts_php=0x7f050003;
         public static final int get_balance_php=0x7f050007;
         public static final int get_transaction_from_username_php=0x7f050005;
         public static final int get_transactions_php=0x7f050004;
-        public static final int hello_world=0x7f050009;
+        public static final int hello_world=0x7f05000b;
         public static final int login_php=0x7f050000;
         public static final int register_php=0x7f050001;
     }
@@ -118,7 +141,7 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060001;
-        public static final int mainTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f070001;
+        public static final int mainTheme=0x7f070000;
     }
 }

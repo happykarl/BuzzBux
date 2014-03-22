@@ -7,19 +7,20 @@
 	$paramUsername = rawurldecode($_POST["username"]);
 	$paramName = rawurldecode($_POST["name"]);
 	$paramDescription = rawurldecode($_POST["description"]);
+	$paramLocale = rawurldecode($_POST["locale"]);
 	
 	$con=mysql_connect("$host", "$username", "$password")or die("cannot connect");
 	mysql_select_db("$db_name")or die("cannot select DB");
 	
 	// check the same account is exist
-	$sql = "SELECT id, name, description FROM `felicekarl_godohosting_com`.`oma_bankaccount` WHERE parentuser='".$paramUsername."' AND name='".$paramName."'";
+	$sql = "SELECT * FROM `felicekarl_godohosting_com`.`oma_bankaccount` WHERE parentuser='".$paramUsername."' AND name='".$paramName."'";
 	$result = mysql_query($sql);
 	if(mysql_num_rows($result)){
-		echo "account is already exist.";
+		echo "Account is already exist.";
 	} else {
 		// add new account
-		$sql = "INSERT INTO `felicekarl_godohosting_com`.`oma_bankaccount` (`id`, `name`, `parentuser`, `description`) 
-					VALUES (NULL, '".$paramName."', '".$paramUsername."', '".$paramDescription."')";
+		$sql = "INSERT INTO `felicekarl_godohosting_com`.`oma_bankaccount` (`index`, `name`, `parentuser`, `description`, `locale`) 
+					VALUES (NULL, '".$paramName."', '".$paramUsername."', '".$paramDescription."', '".$paramLocale."')";
 		$result = mysql_query($sql);
 		
 		// return result
@@ -29,10 +30,12 @@
 		
 		if(mysql_num_rows($result)){
 			while($row=mysql_fetch_assoc($result)){
-				$json['oma_bankaccount'][]=$row;
+				$json['oma_account'][]=$row;
 			}
+			mysql_close($con);
+			echo json_encode($json); 
+		} else {
+			echo "null";
 		}
-		mysql_close($con);
-		echo json_encode($json); 
 	}
 ?>

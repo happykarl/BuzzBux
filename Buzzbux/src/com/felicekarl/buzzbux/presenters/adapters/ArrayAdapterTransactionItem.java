@@ -3,6 +3,7 @@ package com.felicekarl.buzzbux.presenters.adapters;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.felicekarl.buzzbux.R;
 import com.felicekarl.buzzbux.models.Account;
@@ -23,9 +24,9 @@ public class ArrayAdapterTransactionItem extends ArrayAdapter<Transaction> {
 
     private Context mContext;
     private int layoutResourceId;
-    private ArrayList<Transaction> data;
+    private List<Transaction> data;
 
-    public ArrayAdapterTransactionItem(Context mContext, int layoutResourceId, ArrayList<Transaction> data) {
+    public ArrayAdapterTransactionItem(Context mContext, int layoutResourceId, List<Transaction> data) {
 
         super(mContext, layoutResourceId, data);
 

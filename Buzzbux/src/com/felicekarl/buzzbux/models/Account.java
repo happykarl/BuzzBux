@@ -5,13 +5,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-public class Account {
+public class Account implements Comparable {
 	private String id;
 	private String name;
 	private String description;
 	private Money balance;
 	private Locale locale;
-	private ArrayList<Transaction> list;
+	private List<Transaction> list;
 	
 	public Account() {
 		this.list = new ArrayList<Transaction>();
@@ -67,7 +67,12 @@ public class Account {
 		this.balance = balance;
 	}
 	
-	public ArrayList<Transaction> getTransactions() {
+	public List<Transaction> getTransactions() {
 		return list;
+	}
+	
+	@Override
+	public int compareTo(Object obj) {
+		return this.name.compareTo(((Account) obj).name);
 	}
 }

@@ -3,10 +3,13 @@ package com.felicekarl.buzzbux.views.fragments;
 import com.felicekarl.buzzbux.R;
 import com.felicekarl.buzzbux.listeners.*;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -23,6 +26,13 @@ public class ManageTransactionFragment extends BaseFragment implements OnClickLi
 	private static final String TAG = ManageTransactionFragment.class.getSimpleName();
 	
 	private ListView lv_list_transaction;
+	private TextView tv_balance;
+	
+	private View bgLayout1;
+	private View bgLayout2;
+	private View bgLayout3;
+	
+	private View prevView;
 	
 	private ManageTransactionFragmentButtonListener mManageTransactionFragmentButtonListener;
 	
@@ -49,16 +59,43 @@ public class ManageTransactionFragment extends BaseFragment implements OnClickLi
 		lv_list_transaction.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				if (prevView != null) {
+					prevView.setBackgroundColor(Color.parseColor("#eeeeee"));
+				}
+				view.setBackgroundColor(Color.parseColor("#222222"));
+				prevView = view;
 				Log.d(TAG, "position: " + position);
-//				if (mManageAccountFragmentButtonListener != null) {
-//					mManageAccountFragmentButtonListener.selectAccount(position);
-//				}
+				if (mManageTransactionFragmentButtonListener != null) {
+					iView.openMenu();
+					mManageTransactionFragmentButtonListener.selectTransaction(position);
+				}
 			}
 		});
+		
+		tv_balance = (TextView) view.findViewById(R.id.tv_balance);
+		
+		// add bg listener
+    	bgLayout1 = view.findViewById(R.id.bgLayout1);
+    	bgLayout1.setOnClickListener(this);
+    	bgLayout2 = view.findViewById(R.id.bgLayout2);
+    	bgLayout2.setOnClickListener(this);
+    	bgLayout3 = view.findViewById(R.id.bgLayout3);
+    	bgLayout3.setOnClickListener(this);
 		
     	slideUpFragment();
     	
 		return view;
+	}
+	
+	public void setBalance(final String balance) {
+		if (getActivity() != null && getView() != null) {
+    		getActivity().runOnUiThread(new Runnable(){
+    			@Override
+    			public void run() {
+    				tv_balance.setText(balance);
+    			}
+        	});
+    	}
 	}
 
 	@Override
@@ -78,18 +115,18 @@ public class ManageTransactionFragment extends BaseFragment implements OnClickLi
 
 	@Override
 	public void enableButtonListener() {
-		if (bt_list != null) {
-			for (Button bt : bt_list) {
-				bt.setOnClickListener(this);
+		if (view_list != null) {
+			for (View v : view_list) {
+				v.setOnClickListener(this);
 			}
 		}
 	}
 
 	@Override
 	public void disableButtonListener() {
-		if (bt_list != null) {
-			for (Button bt : bt_list) {
-				bt.setOnClickListener(null);
+		if (view_list != null) {
+			for (View v : view_list) {
+				v.setOnClickListener(null);
 			}
 		}
 	}

@@ -2,6 +2,7 @@ package com.felicekarl.buzzbux.presenters.adapters;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.felicekarl.buzzbux.R;
 import com.felicekarl.buzzbux.models.Account;
@@ -19,9 +20,9 @@ public class ArrayAdapterAccountItem extends ArrayAdapter<Account> {
 
     private Context mContext;
     private int layoutResourceId;
-    private ArrayList<Account> data;
+    private List<Account> data;
 
-    public ArrayAdapterAccountItem(Context mContext, int layoutResourceId, ArrayList<Account> data) {
+    public ArrayAdapterAccountItem(Context mContext, int layoutResourceId, List<Account> data) {
 
         super(mContext, layoutResourceId, data);
 
@@ -53,8 +54,6 @@ public class ArrayAdapterAccountItem extends ArrayAdapter<Account> {
         TextView tv_account_name = (TextView) convertView.findViewById(R.id.tv_account_name);
         TextView tv_account_balance = (TextView) convertView.findViewById(R.id.tv_account_balance);
         TextView tv_account_description = (TextView) convertView.findViewById(R.id.tv_account_description);
-        
-        NumberFormat nf = NumberFormat.getCurrencyInstance();
         
         tv_account_name.setText(item.getName());
         tv_account_balance.setText(item.getBalance().toString());
