@@ -11,4 +11,5 @@ public interface IModel {
 	public void setCurTransaction(Transaction transaction);
 	public Transaction getCurTransaction();
 	public boolean deleteTransaction(Account account, Transaction transaction);
+	public boolean deleteAccount(User user, Account account);
 }

@@ -60,6 +60,7 @@ public abstract class BaseFragment extends Fragment {
 		if (isOnStage) {
 			if(isAnimation) {
 				if (direction.equals(DIRECTION.TOP)) {
+					view.setTranslationX(0);
 					view.setTranslationY(-height);
 					view.animate().translationY(0).setDuration(ANIM_SLIDE_DURATION).withLayer();
 				} else if (direction.equals(DIRECTION.BOTTOM)) {
@@ -67,6 +68,7 @@ public abstract class BaseFragment extends Fragment {
 			    		getActivity().runOnUiThread(new Runnable(){
 			    			@Override
 			    			public void run() {
+			    				view.setTranslationX(0);
 			    				view.setTranslationY(height);
 								view.animate().translationY(0).setDuration(ANIM_SLIDE_DURATION).withLayer();
 			    			}

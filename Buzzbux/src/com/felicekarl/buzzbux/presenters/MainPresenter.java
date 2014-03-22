@@ -3,6 +3,8 @@ package com.felicekarl.buzzbux.presenters;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Locale;
+
 import com.felicekarl.buzzbux.R;
 import com.felicekarl.buzzbux.listeners.*;
 import com.felicekarl.buzzbux.models.*;
@@ -10,11 +12,13 @@ import com.felicekarl.buzzbux.presenters.adapters.*;
 import com.felicekarl.buzzbux.views.*;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class MainPresenter implements Runnable {
 	private static final String TAG = MainPresenter.class.getSimpleName();
-	private static final int SPLASH_TIME = 2500;
+	private static final int SPLASH_TIME = 3500;
 	private int timeElapsed = 0;
 	private boolean isLoaded = false;
 	private Thread thread;
@@ -22,6 +26,9 @@ public class MainPresenter implements Runnable {
 	private Context context;
 	private IView view;
 	private IModel model;
+	
+	private SharedPreferences preferences;
+	private SharedPreferences.Editor editor;
 	
 	private Network network;
 	
@@ -38,6 +45,10 @@ public class MainPresenter implements Runnable {
 		/* splash fragment timer */
 		thread = new Thread(this);
         thread.start();
+        
+        /* shared preference */
+		preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		editor = preferences.edit();
 	}
 	
 	private void initListeners() {
@@ -84,7 +95,11 @@ public class MainPresenter implements Runnable {
 				if (JsonParser.parseLogIn(network.submitLogIn(username, password), view, model)) {
 					view.setView(TypeView.DASHBOARD);
 					view.setTitle("Dashboard");
+					// save preference
+					editor.putString("username",username);
+					editor.commit();
 				} else {
+					Log.d(TAG, "fail to log-In");
 					view.enablButtonListener();
 				}
 				view.stopSpinner();
@@ -99,6 +114,9 @@ public class MainPresenter implements Runnable {
 				if (JsonParser.parseRegister(network.submitRegister(username, password, firstname, lastname), view, model)) {
 					view.setView(TypeView.DASHBOARD);
 					view.setTitle("Dashboard");
+					// save preference
+					editor.putString("username",username);
+					editor.commit();
 				} else {
 					view.enablButtonListener();
 				}
@@ -252,6 +270,26 @@ public class MainPresenter implements Runnable {
 				Transaction transaction = model.getCurAccount().getTransactions().get(position);
 				Log.d(TAG, "transaction.getDescription(): " + transaction.getDescription());
 				model.setCurTransaction(transaction);
+			}
+
+			@Override
+			public void delete() {
+				view.startSpinner();
+				String result = network.deleteAccount(model.getCurAccount().getId());
+				if (result.toLowerCase(Locale.US).equals("succeed")) {
+					model.deleteAccount(model.getCurUser(), model.getCurAccount());
+					model.setCurAccount(null);
+					// update account list
+					Collections.sort(model.getCurUserAccounts());
+					view.getManageAccountListView().setAdapter(new ArrayAdapterAccountItem(
+							context, R.layout.fragment_manage_account_item, 
+							model.getCurUserAccounts()));
+					view.setView(TypeView.MANAGEACCOUNT);
+					view.setTitle("Manage Account");
+				} else {
+					view.enablButtonListener();
+				}
+				view.stopSpinner();
 			}
 		});
 		

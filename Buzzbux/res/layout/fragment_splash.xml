@@ -9,11 +9,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="170dp"
         android:textStyle="bold|italic"
         android:fontFamily="sans-serif-condensed"
-        android:textSize="30sp"
-        android:textColor="#000"
+        android:textSize="50sp"
+        android:textColor="#231f20"
         android:text="WELCOME TO BUZZBUX" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="50dp"
+        android:layout_marginBottom="100dp"
+        android:src="@drawable/img_splash" />
         
 </FrameLayout>

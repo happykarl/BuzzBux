@@ -3,6 +3,8 @@ package com.felicekarl.buzzbux.views.fragments;
 import com.felicekarl.buzzbux.R;
 import com.felicekarl.buzzbux.views.TypeView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ public class ActionBarFragment extends BaseFragment implements Runnable, OnClick
 	
 	private TextView tv_title;
 	private ImageView iv_menu;
+	private Button bt_logoff;
 	
 	private static final int LOADING_TIME = 1000;
 	private int timeElapsed = 0;
@@ -51,6 +54,9 @@ public class ActionBarFragment extends BaseFragment implements Runnable, OnClick
         
 		iv_menu.setBackgroundResource(R.drawable.bt_menu);
 		iv_menu.setOnClickListener(this);
+		
+		bt_logoff = (Button) view.findViewById(R.id.bt_logoff);
+		bt_logoff.setOnClickListener(this);
 		
 		slideUpFragment();
     	
@@ -151,6 +157,30 @@ public class ActionBarFragment extends BaseFragment implements Runnable, OnClick
 				iView.setView(TypeView.DASHBOARD);
 			}
 			break;
+		case R.id.bt_logoff:
+			if (!iView.getView().equals(TypeView.LOGIN) && !iView.getView().equals(TypeView.REGISTER)) {
+				confirmLogOffDialog();
+			}
+			break;
 		}
+	}
+	
+	private void confirmLogOffDialog(){
+		AlertDialog.Builder dialoge = new AlertDialog.Builder(getActivity());
+		dialoge.setTitle("Confirm to Log-Off?");
+		dialoge.setPositiveButton("Log-Off", new android.content.DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				iView.setView(TypeView.LOGIN);
+				iView.setTitle("Log-In");
+			}
+		});
+		dialoge.setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				enableButtonListener();
+			}
+		});
+		dialoge.show();
 	}
 }

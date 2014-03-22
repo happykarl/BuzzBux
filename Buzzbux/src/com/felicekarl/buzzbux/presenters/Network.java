@@ -20,6 +20,7 @@ public class Network {
 	private GetBalanceTask mGetBalanceTask;
 	private EditTransactionTask mEditTransactionTask;
 	private DeleteTransactionTask mDeleteTransactionTask;
+	private DeleteAccountTask mDeleteAccountTask;
 	
 	private String login_php;
 	private String register_php;
@@ -31,6 +32,7 @@ public class Network {
 	private String get_transaction_from_username_php;
 	private String edit_transaction_php;
 	private String delete_transaction_php;
+	private String delete_account_php;
 	
 	public static final String TAG_OMA_USER = "oma_user";
 	public static final String TAG_OMA_USER_USERNAME = "username";
@@ -66,6 +68,7 @@ public class Network {
 		get_transaction_from_username_php = context.getResources().getString(R.string.get_transaction_from_username_php);
 		edit_transaction_php = context.getResources().getString(R.string.edit_transaction_php);
 		delete_transaction_php = context.getResources().getString(R.string.delete_transaction_php);
+		delete_account_php = context.getResources().getString(R.string.delete_account_php);
 	}
 	
 	public String submitLogIn(String username, String password) {
@@ -213,6 +216,22 @@ public class Network {
 		try {
 			//Log.d(TAG, "result: " + login_task.get());
 			return mDeleteTransactionTask.get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public String deleteAccount(String accountId) {
+		mDeleteAccountTask = new DeleteAccountTask();
+		mDeleteAccountTask.execute(new String[] {delete_account_php, accountId});
+		try {
+			//Log.d(TAG, "result: " + login_task.get());
+			return mDeleteAccountTask.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

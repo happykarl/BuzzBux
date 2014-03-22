@@ -11,7 +11,7 @@
 	$con = mysql_connect("$host", "$username", "$password")or die("cannot connect");
 	mysql_select_db("$db_name")or die("cannot select DB");
 	
-	// edit transaction
+	// delete transaction
 	$sql = "DELETE FROM `felicekarl_godohosting_com`.`oma_transaction` WHERE `oma_transaction`.`index` ='".$paramTransactionId."'";
 	$result = mysql_query($sql);
 	

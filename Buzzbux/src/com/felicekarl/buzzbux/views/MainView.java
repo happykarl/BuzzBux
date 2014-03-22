@@ -17,11 +17,17 @@ import com.felicekarl.buzzbux.views.fragments.BaseFragment.DIRECTION;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ListView;
 
 public class MainView implements IView {
 	private static final String TAG = MainView.class.getSimpleName();
+	
+	private SharedPreferences preferences;
+	private SharedPreferences.Editor editor;
+	
 	private FragmentManager mFragmentManager;
 	private TypeView curTypeView;
 	
@@ -38,6 +44,10 @@ public class MainView implements IView {
 	private EditTransactionFragment mEditTransactionFragment;
 	
 	public MainView(Context context) {
+		/* shared preference */
+		preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		editor = preferences.edit();
+		
 		this.mFragmentManager = ((MainActivity) context).getFragmentManager();
 		/* Initialize curTypeView as Splash Screen */
 		curTypeView = TypeView.SPLASH;
@@ -73,7 +83,7 @@ public class MainView implements IView {
 		mFragmentManager.beginTransaction().add(R.id.main, mEditTransactionFragment).commit();
 		
 		/* add login fragment */
-		mLogInFragment = LogInFragment.create("admin");
+		mLogInFragment = LogInFragment.create(preferences.getString("username",""));
 		mLogInFragment.setIView(this);
 		mFragmentManager.beginTransaction().add(R.id.main, mLogInFragment).commit();
 		
@@ -159,6 +169,7 @@ public class MainView implements IView {
 				
 				mRegisterFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.REGISTER) && type.equals(TypeView.LOGIN)) {
+				Log.d(TAG, "register -> login");
 				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
 				mLogInFragment.toggle(true, false, DIRECTION.TOP);
 				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
@@ -170,6 +181,10 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				
+				mLogInFragment.resetFragment();
+			} else if (type.equals(TypeView.LOGIN)) {
+				mLogInFragment.toggle(true, true, DIRECTION.TOP);
 				
 				mLogInFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.REGISTER) && type.equals(TypeView.DASHBOARD)) {

@@ -10,4 +10,5 @@
     <string name="get_balance_php">http://felicekarl.godohosting.com/oma/getBalance.php</string>
     <string name="edit_transaction_php">http://felicekarl.godohosting.com/oma/editTransaction.php</string>
     <string name="delete_transaction_php">http://felicekarl.godohosting.com/oma/deleteTransaction.php</string>
+    <string name="delete_account_php">http://felicekarl.godohosting.com/oma/deleteAccount.php</string>
 </resources>

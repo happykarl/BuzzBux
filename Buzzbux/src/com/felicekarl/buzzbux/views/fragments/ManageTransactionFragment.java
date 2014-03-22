@@ -3,6 +3,8 @@ package com.felicekarl.buzzbux.views.fragments;
 import com.felicekarl.buzzbux.R;
 import com.felicekarl.buzzbux.listeners.*;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +33,7 @@ public class ManageTransactionFragment extends BaseFragment implements OnClickLi
 	private View bgLayout1;
 	private View bgLayout2;
 	private View bgLayout3;
+	private Button bt_delete;
 	
 	private View prevView;
 	
@@ -73,6 +76,8 @@ public class ManageTransactionFragment extends BaseFragment implements OnClickLi
 		});
 		
 		tv_balance = (TextView) view.findViewById(R.id.tv_balance);
+		bt_delete = (Button) view.findViewById(R.id.bt_delete);
+		bt_delete.setOnClickListener(this);
 		
 		// add bg listener
     	bgLayout1 = view.findViewById(R.id.bgLayout1);
@@ -103,8 +108,31 @@ public class ManageTransactionFragment extends BaseFragment implements OnClickLi
 		if (iView != null)	iView.closeMenu();
 		closeVirtualKeyboard();
 		switch(v.getId()) {
-		
+		case R.id.bt_delete:
+			disableButtonListener();
+			confirmDeleteAccountDialog();
+			break;
 		}
+	}
+	
+	private void confirmDeleteAccountDialog(){
+		AlertDialog.Builder quitDialog = new AlertDialog.Builder(getActivity());
+		quitDialog.setTitle("Confirm to Delete Account?");
+		quitDialog.setPositiveButton("Yes", new android.content.DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (mManageTransactionFragmentButtonListener != null) {
+					mManageTransactionFragmentButtonListener.delete();
+				}
+			}
+		});
+		quitDialog.setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				enableButtonListener();
+			}
+		});
+		quitDialog.show();
 	}
 
 	@Override

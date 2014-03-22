@@ -49,4 +49,9 @@ public class MainModel implements IModel {
 		ArrayList<Transaction> list = (ArrayList<Transaction>) account.getTransactions();
 		return list.remove(transaction);
 	}
+	@Override
+	public boolean deleteAccount(User user, Account account) {
+		ArrayList<Account> list = user.getAccounts();
+		return list.remove(account);
+	}
 }

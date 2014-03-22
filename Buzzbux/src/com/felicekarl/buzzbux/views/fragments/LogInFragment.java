@@ -1,9 +1,13 @@
 package com.felicekarl.buzzbux.views.fragments;
 
 import com.felicekarl.buzzbux.R;
+import com.felicekarl.buzzbux.activities.MainActivity;
 import com.felicekarl.buzzbux.listeners.*;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,8 @@ public class LogInFragment extends BaseFragment implements OnClickListener, Upda
 	
 	private static final String ARG_USERNAME = "username";
 	private String username;
+	
+	
 	
 	private LogInFragmentButtonListener mLogInFragmentButtonListener;
 	
@@ -109,6 +115,7 @@ public class LogInFragment extends BaseFragment implements OnClickListener, Upda
 		switch(v.getId()) {
 		case R.id.bt_login:
 			if (mLogInFragmentButtonListener != null) {
+				disableButtonListener();
 				// initialize the error msg text view
 				if (getActivity() != null && getView() != null) {
 		    		getActivity().runOnUiThread(new Runnable(){
@@ -119,13 +126,14 @@ public class LogInFragment extends BaseFragment implements OnClickListener, Upda
 		        	});
 		    	}
 				mLogInFragmentButtonListener.submitLogIn(et_username.getText().toString(), et_password.getText().toString());
-				disableButtonListener();
+				
 			}
 			break;
 		case R.id.bt_register:
 			if (mLogInFragmentButtonListener != null) {
-				mLogInFragmentButtonListener.submitRegister();
 				disableButtonListener();
+				mLogInFragmentButtonListener.submitRegister();
+				
 			}
 			break;
 		}
@@ -144,6 +152,9 @@ public class LogInFragment extends BaseFragment implements OnClickListener, Upda
 				@Override
 				public void run() {
 					tv_error.setText("");
+					if (!MainActivity.D) {
+						et_password.setText("");
+					}
 				}
 	    	});
 		}
@@ -154,6 +165,7 @@ public class LogInFragment extends BaseFragment implements OnClickListener, Upda
 	
 	@Override
 	public void enableButtonListener() {
+		Log.d(TAG, "enableButtonListener()");
 		if (view_list != null) {
 			for (View v : view_list) {
 				v.setOnClickListener(this);
