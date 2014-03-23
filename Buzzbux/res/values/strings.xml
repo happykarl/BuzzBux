@@ -17,7 +17,12 @@
         <item>DEBIT</item>
         <item>CREDIT</item>
         <item>REFUND</item>
-        <item>VOID</item>
+    </string-array>
+    
+    <string-array name="array_report_type">
+        <item>ALL</item>
+        <item>INCOME</item>
+        <item>EXPENSE</item>
     </string-array>
     
 </resources>

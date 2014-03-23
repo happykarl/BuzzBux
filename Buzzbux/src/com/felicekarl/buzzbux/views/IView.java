@@ -9,7 +9,8 @@ public interface IView  extends UpdateLogInFragmentButtonListener,
 		UpdateRegisterFragmentButtonListener, UpdateDashboardFragmentButtonListener,
 		UpdateManageAccountFragmentButtonListener, UpdateFooterFragmentButtonListener,
 		UpdateAddAccountFragmentButtonListener, UpdateAddTransactionFragmentButtonListener,
-		UpdateManageTransactionFragmentButtonListener, UpdateEditTransactionFragmentButtonListener {
+		UpdateManageTransactionFragmentButtonListener, UpdateEditTransactionFragmentButtonListener,
+		UpdateManageReportFragmentButtonListener, UpdateShowReportFragmentButtonListener {
 	public void setView(TypeView type);
 	public TypeView getView();
 	public void closeMenu();
@@ -24,12 +25,15 @@ public interface IView  extends UpdateLogInFragmentButtonListener,
 	public void setAddTransactionErrorMsg(String msg);
 	public void setAddTransactionCurrency(String currency);
 	public void setManageTransactionBalance(String balance);
+	public void setShowReportAmount(String amount);
 	public void enablButtonListener();
 	
 	
 	
 	public ListView getManageAccountListView();
 	public ListView getManageTransactionListView();
+	public ListView getManageReportListView();
+	public ListView getShowReportListView();
 	public void fillEditTransactionForm(Transaction transaction);
 	public void setEditTransactionCurrency(String currency);
 	

@@ -1,8 +1,10 @@
 package com.felicekarl.buzzbux.presenters;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import com.felicekarl.buzzbux.R;
@@ -10,6 +12,7 @@ import com.felicekarl.buzzbux.listeners.*;
 import com.felicekarl.buzzbux.models.*;
 import com.felicekarl.buzzbux.presenters.adapters.*;
 import com.felicekarl.buzzbux.views.*;
+import com.felicekarl.buzzbux.views.fragments.ShowReportFragment.TypeReport;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -157,7 +160,18 @@ public class MainPresenter implements Runnable {
 			@Override
 			public void submitReportTransaction() {
 				view.startSpinner();
-				view.enablButtonListener();
+				if (JsonParser.parseAccounts(network.getAccounts(
+						model.getCurUser().getUsername()), view, model)) {
+					// update list
+					Collections.sort(model.getCurUserAccounts());
+					view.getManageReportListView().setAdapter(new ArrayAdapterAccountItem(
+							context, R.layout.fragment_manage_report_item, 
+							model.getCurUserAccounts()));
+					view.setView(TypeView.MANAGEREPORT);
+					view.setTitle("Manage Report");
+				} else {
+					view.enablButtonListener();
+				}
 				view.stopSpinner();
 			}
 			@Override
@@ -388,6 +402,105 @@ public class MainPresenter implements Runnable {
 					view.enablButtonListener();
 				}
 				view.stopSpinner();
+			}
+		});
+		
+		/* add ManageReportFragment button listener */
+		view.updateManageReportFragmentButtonListener(new ManageReportFragmentButtonListener() {
+			@Override
+			public void submit(List<Integer> selectedItemPosition, Calendar date_from, Calendar date_to) {
+				view.startSpinner();
+				List<Integer> idList = new ArrayList<Integer>(); 
+				for (Integer i : selectedItemPosition) {
+					idList.add(Integer.valueOf(model.getCurUser().getAccounts().get(i).getId()));
+				}
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				if (JsonParser.parseReport(network.getTransactions(idList, sdf.format(date_from.getTime()),
+						sdf.format(date_to.getTime())), view, model)) {
+					// update transaction list
+					Collections.sort(model.getCurReportTransactions());
+					view.getShowReportListView().setAdapter(new ArrayAdapterTransactionItem(
+							context, R.layout.fragment_manage_transaction_item, 
+							model.getCurReportTransactions()));
+					// calculate amount
+					int total = 0;
+					for (Transaction t : model.getCurReportTransactions()) {
+						total += t.getSignedValue();
+					}
+					// TODO: Hard coded locale
+					Money amount = new Money(Locale.US, total);
+					view.setShowReportAmount(amount.toString());
+					// change view
+					Log.d(TAG, "JsonParser.parseReport - succeed");
+					view.setView(TypeView.SHOWREPORT);
+					view.setTitle("Report");
+				} else {
+					Log.d(TAG, "JsonParser.parseReport - failed");
+					view.enablButtonListener();
+				}
+				view.stopSpinner();
+			}
+		});
+		
+		/* add ShowReportFragment button click listener */
+		view.updateShowReportFragmentButtonListener(new ShowReportFragmentButtonListener() {
+			@Override
+			public void setReportType(TypeReport reportType) {
+				if (model.getCurReportTransactions() != null) {
+					if (reportType.equals(TypeReport.ALL)) {
+						Log.d(TAG, "reportType.equals(TypeReport.ALL)");
+						view.getShowReportListView().setAdapter(new ArrayAdapterTransactionItem(
+								context, R.layout.fragment_manage_transaction_item, 
+								model.getCurReportTransactions()));
+						// calculate amount
+						int total = 0;
+						for (Transaction t : model.getCurReportTransactions()) {
+							total += t.getSignedValue();
+						}
+						// TODO: Hard coded locale
+						Money amount = new Money(Locale.US, total);
+						view.setShowReportAmount(amount.toString());
+					} else if (reportType.equals(TypeReport.INCOME)) {
+						Log.d(TAG, "reportType.equals(TypeReport.INCOME)");
+						List<Transaction> list = new ArrayList<Transaction>();
+						for (Transaction t : model.getCurReportTransactions()) {
+							TransType type = t.getType();
+							if ( type.equals(TransType.DEPOSIT) || type.equals(TransType.REFUND) ) {
+								list.add(t);
+							}
+						}
+						view.getShowReportListView().setAdapter(new ArrayAdapterTransactionItem(
+								context, R.layout.fragment_manage_transaction_item, list));
+						// calculate amount
+						int total = 0;
+						for (Transaction t : list) {
+							total += t.getSignedValue();
+						}
+						// TODO: Hard coded locale
+						Money amount = new Money(Locale.US, total);
+						view.setShowReportAmount(amount.toString());
+					} else if (reportType.equals(TypeReport.EXPENSE)) {
+						Log.d(TAG, "reportType.equals(TypeReport.EXPENSE)");
+						List<Transaction> list = new ArrayList<Transaction>();
+						for (Transaction t : model.getCurReportTransactions()) {
+							TransType type = t.getType();
+							if ( type.equals(TransType.WITHDRAWAL) || type.equals(TransType.DEBIT) ||
+									type.equals(TransType.CREDIT) || type.equals(TransType.VOID) ) {
+								list.add(t);
+							}
+						}
+						view.getShowReportListView().setAdapter(new ArrayAdapterTransactionItem(
+								context, R.layout.fragment_manage_transaction_item, list));
+						// calculate amount
+						int total = 0;
+						for (Transaction t : list) {
+							total += t.getSignedValue();
+						}
+						// TODO: Hard coded locale
+						Money amount = new Money(Locale.US, total);
+						view.setShowReportAmount(amount.toString());
+					}
+				}
 			}
 		});
 	}

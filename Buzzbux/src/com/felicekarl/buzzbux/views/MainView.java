@@ -9,8 +9,10 @@ import com.felicekarl.buzzbux.listeners.EditTransactionFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.FooterFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.LogInFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.ManageAccountFragmentButtonListener;
+import com.felicekarl.buzzbux.listeners.ManageReportFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.ManageTransactionFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.RegisterFragmentButtonListener;
+import com.felicekarl.buzzbux.listeners.ShowReportFragmentButtonListener;
 import com.felicekarl.buzzbux.models.Transaction;
 import com.felicekarl.buzzbux.views.fragments.*;
 import com.felicekarl.buzzbux.views.fragments.BaseFragment.DIRECTION;
@@ -42,6 +44,8 @@ public class MainView implements IView {
 	private AddAccountFragment mAddAccountFragment;
 	private AddTransactionFragment mAddTransactionFragment;
 	private EditTransactionFragment mEditTransactionFragment;
+	private ManageReportFragment mManageReportFragment;
+	private ShowReportFragment mShowReportFragment;
 	
 	public MainView(Context context) {
 		/* shared preference */
@@ -66,6 +70,16 @@ public class MainView implements IView {
 		mAddAccountFragment = AddAccountFragment.create();
 		mAddAccountFragment.setIView(this);
 		mFragmentManager.beginTransaction().add(R.id.main, mAddAccountFragment).commit();
+		
+		/* add manage report fragment */
+		mManageReportFragment = ManageReportFragment.create();
+		mManageReportFragment.setIView(this);
+		mFragmentManager.beginTransaction().add(R.id.main, mManageReportFragment).commit();
+		
+		/* add show report fragment */
+		mShowReportFragment = ShowReportFragment.create();
+		mShowReportFragment.setIView(this);
+		mFragmentManager.beginTransaction().add(R.id.main, mShowReportFragment).commit();
 		
 		/* add manage transaction fragment */
 		mManageTransactionFragment = ManageTransactionFragment.create();
@@ -123,6 +137,8 @@ public class MainView implements IView {
 			mAddAccountFragment.disableButtonListener();
 			mAddTransactionFragment.disableButtonListener();
 			mEditTransactionFragment.disableButtonListener();
+			mManageReportFragment.disableButtonListener();
+			mShowReportFragment.disableButtonListener();
 			
 			closeMenu();
 			
@@ -138,6 +154,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mLogInFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.LOGIN) && type.equals(TypeView.DASHBOARD)) {
@@ -152,6 +170,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mDashboardFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.LOGIN) && type.equals(TypeView.REGISTER)) {
@@ -166,6 +186,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mRegisterFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.REGISTER) && type.equals(TypeView.LOGIN)) {
@@ -181,6 +203,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mLogInFragment.resetFragment();
 			} else if (type.equals(TypeView.LOGIN)) {
@@ -199,6 +223,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mDashboardFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.DASHBOARD) && type.equals(TypeView.MANAGEACCOUNT)) {
@@ -213,8 +239,75 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mManageAccountFragment.resetFragment();
+			} else if (curTypeView.equals(TypeView.DASHBOARD) && type.equals(TypeView.MANAGEREPORT)) {
+				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mLogInFragment.toggle(false, false, DIRECTION.TOP);
+				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
+				mFooterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mDashboardFragment.toggle(false, true, DIRECTION.LEFT);
+				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mManageAccountFragment.toggle(false, false, DIRECTION.RIGHT);
+				//mManageTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(true, true, DIRECTION.RIGHT);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
+				
+				mManageReportFragment.resetFragment();
+			} else if (curTypeView.equals(TypeView.MANAGEREPORT) && type.equals(TypeView.DASHBOARD)) {
+				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mLogInFragment.toggle(false, false, DIRECTION.TOP);
+				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
+				mFooterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mDashboardFragment.toggle(true, true, DIRECTION.LEFT);
+				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mManageAccountFragment.toggle(false, false, DIRECTION.RIGHT);
+				//mManageTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, true, DIRECTION.RIGHT);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
+				
+				mDashboardFragment.resetFragment();
+			} else if (curTypeView.equals(TypeView.MANAGEREPORT) && type.equals(TypeView.SHOWREPORT)) {
+				Log.d(TAG, "MANAGEREPORT -> SHOWREPORT");
+				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mLogInFragment.toggle(false, false, DIRECTION.TOP);
+				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
+				mFooterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mDashboardFragment.toggle(false, false, DIRECTION.LEFT);
+				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mManageAccountFragment.toggle(false, false, DIRECTION.RIGHT);
+				//mManageTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, true, DIRECTION.LEFT);
+				mShowReportFragment.toggle(true, true, DIRECTION.RIGHT);
+				
+				mShowReportFragment.resetFragment();
+			} else if (curTypeView.equals(TypeView.SHOWREPORT) && type.equals(TypeView.MANAGEREPORT)) {
+				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mLogInFragment.toggle(false, false, DIRECTION.TOP);
+				mActionBarFragment.toggle(true, false, DIRECTION.TOP);
+				mFooterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mDashboardFragment.toggle(false, false, DIRECTION.LEFT);
+				mRegisterFragment.toggle(false, false, DIRECTION.BOTTOM);
+				mManageAccountFragment.toggle(false, false, DIRECTION.RIGHT);
+				//mManageTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
+				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(true, true, DIRECTION.LEFT);
+				mShowReportFragment.toggle(false, true, DIRECTION.RIGHT);
+				
+				mManageReportFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.MANAGEACCOUNT) && type.equals(TypeView.DASHBOARD)) {
 				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
 				mLogInFragment.toggle(false, false, DIRECTION.TOP);
@@ -227,6 +320,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mDashboardFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.MANAGEACCOUNT) && type.equals(TypeView.ADDACCOUNT)) {
@@ -241,6 +336,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(true, true, DIRECTION.BOTTOM);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mAddAccountFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.ADDACCOUNT) && type.equals(TypeView.MANAGEACCOUNT)) {
@@ -255,6 +352,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, true, DIRECTION.BOTTOM);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mManageAccountFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.MANAGEACCOUNT) && type.equals(TypeView.MANAGETRANSACTION)) {
@@ -269,6 +368,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mManageTransactionFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.MANAGETRANSACTION) && type.equals(TypeView.MANAGEACCOUNT)) {
@@ -283,6 +384,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.TOP);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mManageAccountFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.MANAGETRANSACTION) && type.equals(TypeView.ADDTRANSACTION)) {
@@ -297,6 +400,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(true, true, DIRECTION.BOTTOM);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mAddTransactionFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.ADDTRANSACTION) && type.equals(TypeView.MANAGETRANSACTION)) {
@@ -311,6 +416,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, true, DIRECTION.BOTTOM);
 				mEditTransactionFragment.toggle(false, false, DIRECTION.TOP);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mManageTransactionFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.MANAGETRANSACTION) && type.equals(TypeView.EDITTRANSACTION)) {
@@ -325,6 +432,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.BOTTOM);
 				mEditTransactionFragment.toggle(true, true, DIRECTION.BOTTOM);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mEditTransactionFragment.resetFragment();
 			} else if (curTypeView.equals(TypeView.EDITTRANSACTION) && type.equals(TypeView.MANAGETRANSACTION)) {
@@ -339,6 +448,8 @@ public class MainView implements IView {
 				mAddAccountFragment.toggle(false, false, DIRECTION.TOP);
 				mAddTransactionFragment.toggle(false, false, DIRECTION.BOTTOM);
 				mEditTransactionFragment.toggle(false, true, DIRECTION.BOTTOM);
+				mManageReportFragment.toggle(false, false, DIRECTION.TOP);
+				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mManageTransactionFragment.resetFragment();
 			}
@@ -390,6 +501,8 @@ public class MainView implements IView {
 			mManageAccountFragment.enableButtonListener();
 		} else if (curTypeView.equals(TypeView.MANAGETRANSACTION)) {
 			mManageTransactionFragment.enableButtonListener();
+		} else if (curTypeView.equals(TypeView.MANAGEREPORT)) {
+			mManageReportFragment.enableButtonListener();
 		}
 	}
 
@@ -493,6 +606,33 @@ public class MainView implements IView {
 	@Override
 	public void setManageTransactionBalance(String balance) {
 		mManageTransactionFragment.setBalance(balance);
+	}
+
+	@Override
+	public ListView getManageReportListView() {
+		return mManageReportFragment.getListView();
+	}
+
+	@Override
+	public void updateManageReportFragmentButtonListener(
+			ManageReportFragmentButtonListener mManageReportFragmentButtonListener) {
+		mManageReportFragment.updateManageReportFragmentButtonListener(mManageReportFragmentButtonListener);
+	}
+
+	@Override
+	public ListView getShowReportListView() {
+		return mShowReportFragment.getListView();
+	}
+
+	@Override
+	public void setShowReportAmount(String amount) {
+		mShowReportFragment.setAmount(amount);
+	}
+
+	@Override
+	public void updateShowReportFragmentButtonListener(
+			ShowReportFragmentButtonListener mShowReportFragmentButtonListener) {
+		mShowReportFragment.updateShowReportFragmentButtonListener(mShowReportFragmentButtonListener);
 	}
 
 	

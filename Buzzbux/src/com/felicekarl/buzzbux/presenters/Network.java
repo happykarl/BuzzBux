@@ -1,5 +1,6 @@
 package com.felicekarl.buzzbux.presenters;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import com.felicekarl.buzzbux.R;
@@ -21,6 +22,7 @@ public class Network {
 	private EditTransactionTask mEditTransactionTask;
 	private DeleteTransactionTask mDeleteTransactionTask;
 	private DeleteAccountTask mDeleteAccountTask;
+	private GetTransactionsFromAccountsTask mGetTransactionsFromAccountsTask;
 	
 	private String login_php;
 	private String register_php;
@@ -29,10 +31,10 @@ public class Network {
 	private String get_transactions_php;
 	private String add_transaction_php;
 	private String get_balance_php;
-	private String get_transaction_from_username_php;
 	private String edit_transaction_php;
 	private String delete_transaction_php;
 	private String delete_account_php;
+	private String get_transactions_from_accounts_php;
 	
 	public static final String TAG_OMA_USER = "oma_user";
 	public static final String TAG_OMA_USER_USERNAME = "username";
@@ -56,6 +58,9 @@ public class Network {
 	public static final String TAG_OMA_TRANSACTION_DIFF = "diff";
 	public static final String TAG_OMA_TRANSACTION_DESC = "description";
 	public static final String TAG_OMA_TRANSACTION_DATE = "date";
+	public static final String TAG_OMA_TRANSACTION_DATE_FROM = "datefrom";
+	public static final String TAG_OMA_TRANSACTION_DATE_TO = "dateto";
+	public static final String TAG_OMA_TRANSACTION_INDECES = "indeces[]";
 	
 	public Network(Context context) {
 		login_php = context.getResources().getString(R.string.login_php);
@@ -65,10 +70,10 @@ public class Network {
 		get_transactions_php = context.getResources().getString(R.string.get_transactions_php);
 		add_transaction_php = context.getResources().getString(R.string.add_transaction_php);
 		get_balance_php = context.getResources().getString(R.string.get_balance_php);
-		get_transaction_from_username_php = context.getResources().getString(R.string.get_transaction_from_username_php);
 		edit_transaction_php = context.getResources().getString(R.string.edit_transaction_php);
 		delete_transaction_php = context.getResources().getString(R.string.delete_transaction_php);
 		delete_account_php = context.getResources().getString(R.string.delete_account_php);
+		get_transactions_from_accounts_php = context.getResources().getString(R.string.get_transactions_from_accounts_php);
 	}
 	
 	public String submitLogIn(String username, String password) {
@@ -241,5 +246,27 @@ public class Network {
 		}
 		return null;
 	}
-	
+
+	public String getTransactions(List<Integer> list, String date_from, String date_to) {
+		String[] params = new String[list.size() + 3];
+		params[0] = get_transactions_from_accounts_php;
+		params[1] = date_from;
+		params[2] = date_to;
+		for (int i=0; i<list.size(); i++) {
+			params[3+i] = String.valueOf(list.get(i));
+		}
+		mGetTransactionsFromAccountsTask = new GetTransactionsFromAccountsTask();
+		mGetTransactionsFromAccountsTask.execute(params);
+		try {
+			//Log.d(TAG, "result: " + login_task.get());
+			return mGetTransactionsFromAccountsTask.get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

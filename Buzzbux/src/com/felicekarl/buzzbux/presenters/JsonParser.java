@@ -3,8 +3,10 @@ package com.felicekarl.buzzbux.presenters;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.json.JSONArray;
@@ -284,6 +286,53 @@ public class JsonParser {
 			}
 		} catch (JSONException e) {
 			view.setAddTransactionErrorMsg("Network error. Check the connection please.");
+		}
+		return false;
+	}
+	
+	public static boolean parseReport(String str, IView view, IModel model) {
+		Log.d(TAG, "str: " + str);
+		if (str == null)	return false;
+		try {
+			if (str.toLowerCase(Locale.US).contains("null")) {
+				return false;
+			} else {
+				JSONObject jsonObj = new JSONObject(str);
+				JSONArray transactions = jsonObj.getJSONArray(Network.TAG_OMA_TRANSACTION);
+				if (transactions.length() < 1) {
+					view.setAddTransactionErrorMsg("Failed to make a transaction. Try again.");
+					return false;
+				} else {
+					List<Transaction> list = new ArrayList<Transaction>();
+					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+					Log.d(TAG, "transactions.length(): " + transactions.length());
+					for (int i=0; i<transactions.length(); i++) {
+						JSONObject user = transactions.getJSONObject(i);
+						String index = user.getString(Network.TAG_OMA_TRANSACTION_INDEX);
+						String accountId = user.getString(Network.TAG_OMA_TRANSACTION_ACCOUNT_ID);
+						String type = user.getString(Network.TAG_OMA_TRANSACTION_TYPE);
+						String description = user.getString(Network.TAG_OMA_TRANSACTION_DESC);
+						int value = (int) Integer.valueOf(user.getString(Network.TAG_OMA_TRANSACTION_AMOUNT));
+						// TODO: Hard coded locale
+						Money amount = new Money(Locale.US, value);
+						String dateStr = user.getString(Network.TAG_OMA_TRANSACTION_DATE);
+						Date date = null;
+						try {
+							date = df.parse(dateStr);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						Transaction item = new Transaction(index, TransTypeParser.parseTransType(type), 
+								description, amount, date);
+						list.add(item);
+					}
+					model.setCurReportTransactions(list);
+					return true;
+				}
+			}
+		} catch (JSONException e) {
+			
 		}
 		return false;
 	}

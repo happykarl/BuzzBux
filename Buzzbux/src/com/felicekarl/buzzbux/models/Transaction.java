@@ -49,6 +49,18 @@ public class Transaction implements Comparable {
 		return amount;
 	}
 	
+	public int getSignedValue() {
+		if ( type.equals(TransType.DEPOSIT) || type.equals(TransType.REFUND) ) {
+			return amount.getValue();
+		} else if ( type.equals(TransType.WITHDRAWAL) || 
+				type.equals(TransType.DEBIT) ||
+				type.equals(TransType.CREDIT) || 
+				type.equals(TransType.VOID) ) {
+			return -1 * amount.getValue();
+		}
+		return 0;
+	}
+	
 	public String getSignedAmount() {
 		if ( type.equals(TransType.DEPOSIT) || type.equals(TransType.REFUND) ) {
 			return "+" + amount.toString();

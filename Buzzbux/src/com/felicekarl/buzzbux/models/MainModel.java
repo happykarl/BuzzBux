@@ -12,6 +12,7 @@ public class MainModel implements IModel {
 	private User curUser;
 	private Account curAccount;
 	private Transaction curTransaction;
+	private List<Transaction> reportTransactions;
 
 	public MainModel(Context context) {
 		this.context = context;
@@ -53,5 +54,13 @@ public class MainModel implements IModel {
 	public boolean deleteAccount(User user, Account account) {
 		ArrayList<Account> list = user.getAccounts();
 		return list.remove(account);
+	}
+	@Override
+	public void setCurReportTransactions(List<Transaction> list) {
+		this.reportTransactions = list;
+	}
+	@Override
+	public List<Transaction> getCurReportTransactions() {
+		return reportTransactions;
 	}
 }

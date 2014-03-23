@@ -153,8 +153,16 @@ public class ActionBarFragment extends BaseFragment implements Runnable, OnClick
 		case R.id.iv_menu:
 			if (iView.getView().equals(TypeView.MANAGETRANSACTION)) {
 				iView.setView(TypeView.MANAGEACCOUNT);
+				iView.setTitle("Manage Account");
 			} else if (iView.getView().equals(TypeView.MANAGEACCOUNT)) {
 				iView.setView(TypeView.DASHBOARD);
+				iView.setTitle("Dashboard");
+			} else if (iView.getView().equals(TypeView.MANAGEREPORT)) {
+				iView.setView(TypeView.DASHBOARD);
+				iView.setTitle("Dashboard");
+			} else if (iView.getView().equals(TypeView.SHOWREPORT)) {
+				iView.setView(TypeView.MANAGEREPORT);
+				iView.setTitle("Manage Report");
 			}
 			break;
 		case R.id.bt_logoff:
