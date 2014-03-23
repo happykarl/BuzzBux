@@ -104,6 +104,7 @@
                         android:text="pass123"
                         android:textColor="#000"
                         android:textSize="20sp" >
+
                         <requestFocus />
                     </EditText>
                 </LinearLayout>
@@ -163,6 +164,13 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/img_splash" />
         </LinearLayout>
 
     </ScrollView>
