@@ -270,6 +270,7 @@ public class ManageReportFragment extends BaseFragment implements OnClickListene
 	public void resetFragment() {
 		//enable button listener
 		enableButtonListener();
+		
 	}
 
 	@Override
@@ -298,5 +299,9 @@ public class ManageReportFragment extends BaseFragment implements OnClickListene
 	public void updateManageReportFragmentButtonListener(
 			ManageReportFragmentButtonListener mManageReportFragmentButtonListener) {
 		this.mManageReportFragmentButtonListener = mManageReportFragmentButtonListener;
+	}
+
+	public void resetSelection() {
+		selectedItemPosition = new ArrayList<Integer>();
 	}
 }

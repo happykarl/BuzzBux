@@ -11,7 +11,10 @@ import com.felicekarl.buzzbux.models.LocaleParser;
 import com.felicekarl.buzzbux.models.Money;
 import com.felicekarl.buzzbux.models.TransType;
 import com.felicekarl.buzzbux.models.Transaction;
+import com.felicekarl.buzzbux.views.TypeView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.Editable;
@@ -223,10 +226,7 @@ public class EditTransactionFragment extends BaseFragment implements OnClickList
 			}
 			break;
 		case R.id.bt_delete:
-			if (mEditTransactionFragmentButtonListener != null) {
-				disableButtonListener();
-				mEditTransactionFragmentButtonListener.delete();
-			}
+			confirmDeleteDialog();
 			break;
 		}
 	}
@@ -304,5 +304,26 @@ public class EditTransactionFragment extends BaseFragment implements OnClickList
 				}
 			});
 		}
+	}
+	
+	private void confirmDeleteDialog(){
+		AlertDialog.Builder dialoge = new AlertDialog.Builder(getActivity());
+		dialoge.setTitle("Confirm to delete Transaction?");
+		dialoge.setPositiveButton("Delete", new android.content.DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (mEditTransactionFragmentButtonListener != null) {
+					disableButtonListener();
+					mEditTransactionFragmentButtonListener.delete();
+				}
+			}
+		});
+		dialoge.setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				enableButtonListener();
+			}
+		});
+		dialoge.show();
 	}
 }

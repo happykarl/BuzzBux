@@ -261,6 +261,7 @@ public class MainView implements IView {
 				mShowReportFragment.toggle(false, false, DIRECTION.TOP);
 				
 				mManageReportFragment.resetFragment();
+				mManageReportFragment.resetSelection();
 			} else if (curTypeView.equals(TypeView.MANAGEREPORT) && type.equals(TypeView.DASHBOARD)) {
 				mSplashFragment.toggle(false, false, DIRECTION.BOTTOM);
 				mLogInFragment.toggle(false, false, DIRECTION.TOP);

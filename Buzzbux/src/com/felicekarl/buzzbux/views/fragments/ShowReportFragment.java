@@ -166,4 +166,9 @@ public class ShowReportFragment extends BaseFragment implements OnClickListener,
 			ShowReportFragmentButtonListener mShowReportFragmentButtonListener) {
 		this.mShowReportFragmentButtonListener = mShowReportFragmentButtonListener;
 	}
+
+	public void resetSelection() {
+		// TODO Auto-generated method stub
+		
+	}
 }
