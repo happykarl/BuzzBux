@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.felicekarl.buzzbux.R;
 import com.felicekarl.buzzbux.listeners.*;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -16,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.TextureView;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
@@ -40,6 +40,7 @@ public class ShowReportFragment extends BaseFragment implements OnClickListener,
 	private Spinner sp_report_type;
 	private TextView tv_amount;
 	private ListView lv_list_transaction;
+	private View ll_graph;
 	
 	private View bgLayout1;
 	private View bgLayout2;
@@ -72,6 +73,7 @@ public class ShowReportFragment extends BaseFragment implements OnClickListener,
 		sp_report_type = (Spinner) view.findViewById(R.id.sp_report_type);
 		tv_amount = (TextView) view.findViewById(R.id.tv_amount);
 		lv_list_transaction = (ListView) view.findViewById(R.id.lv_list_transaction);
+		ll_graph = view.findViewById(R.id.ll_graph);
 		
 		sp_report_type.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -153,6 +155,10 @@ public class ShowReportFragment extends BaseFragment implements OnClickListener,
 	
 	public ListView getListView() {
 		return lv_list_transaction;
+	}
+	
+	public View getGraphVirew() {
+		return ll_graph;
 	}
 
 	@Override

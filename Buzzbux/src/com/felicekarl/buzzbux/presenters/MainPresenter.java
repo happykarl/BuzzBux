@@ -13,11 +13,22 @@ import com.felicekarl.buzzbux.models.*;
 import com.felicekarl.buzzbux.presenters.adapters.*;
 import com.felicekarl.buzzbux.views.*;
 import com.felicekarl.buzzbux.views.fragments.ShowReportFragment.TypeReport;
+import com.jjoe64.graphview.CustomLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GraphViewDataInterface;
+import com.jjoe64.graphview.GraphViewSeries;
+import com.jjoe64.graphview.LineGraphView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.TextureView;
+import android.view.View;
+import android.widget.LinearLayout;
 
 public class MainPresenter implements Runnable {
 	private static final String TAG = MainPresenter.class.getSimpleName();
@@ -147,7 +158,16 @@ public class MainPresenter implements Runnable {
 						model.getCurUser().getUsername()), view, model)) {
 					// update list
 					Collections.sort(model.getCurUserAccounts());
-					view.getManageAccountListView().setAdapter(new ArrayAdapterAccountItem(
+					// import transactions for each account
+					for (Account a : model.getCurUserAccounts()) {
+						if (JsonParser.parseTransactions(a, network.getTransactions(a.getId()), view, model)) {
+							// update list
+							Collections.sort(a.getTransactions());
+						}
+					}
+					
+					
+					view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
 							context, R.layout.fragment_manage_account_item, 
 							model.getCurUserAccounts()));
 					view.setView(TypeView.MANAGEACCOUNT);
@@ -219,7 +239,7 @@ public class MainPresenter implements Runnable {
 						view, model)) {
 					// update list
 					Collections.sort(model.getCurUserAccounts());
-					view.getManageAccountListView().setAdapter(new ArrayAdapterAccountItem(
+					view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
 							context, R.layout.fragment_manage_account_item, 
 							model.getCurUserAccounts()));
 					view.setView(TypeView.MANAGEACCOUNT);
@@ -257,7 +277,7 @@ public class MainPresenter implements Runnable {
 							(int) Integer.valueOf(network.getBalance(model.getCurAccount().getId())));
 					Log.d(TAG, "money: " + balance.toString());
 					model.getCurAccount().setBalance(balance);
-					view.getManageAccountListView().setAdapter(new ArrayAdapterAccountItem(
+					view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
 							context, R.layout.fragment_manage_account_item, 
 							model.getCurUserAccounts()));
 					// update balance in ManageTransaction view
@@ -295,7 +315,7 @@ public class MainPresenter implements Runnable {
 					model.setCurAccount(null);
 					// update account list
 					Collections.sort(model.getCurUserAccounts());
-					view.getManageAccountListView().setAdapter(new ArrayAdapterAccountItem(
+					view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
 							context, R.layout.fragment_manage_account_item, 
 							model.getCurUserAccounts()));
 					view.setView(TypeView.MANAGEACCOUNT);
@@ -342,7 +362,7 @@ public class MainPresenter implements Runnable {
 							(int) Integer.valueOf(network.getBalance(model.getCurAccount().getId())));
 					Log.d(TAG, "money: " + balance.toString());
 					model.getCurAccount().setBalance(balance);
-					view.getManageAccountListView().setAdapter(new ArrayAdapterAccountItem(
+					view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
 							context, R.layout.fragment_manage_account_item, 
 							model.getCurUserAccounts()));
 					// update balance in ManageTransaction view
@@ -385,7 +405,7 @@ public class MainPresenter implements Runnable {
 						Money balance = new Money(model.getCurAccount().getLocale(), value);
 						Log.d(TAG, "money: " + balance.toString());
 						model.getCurAccount().setBalance(balance);
-						view.getManageAccountListView().setAdapter(new ArrayAdapterAccountItem(
+						view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
 								context, R.layout.fragment_manage_account_item, 
 								model.getCurUserAccounts()));
 						// update balance in ManageTransaction view
@@ -430,6 +450,36 @@ public class MainPresenter implements Runnable {
 					// TODO: Hard coded locale
 					Money amount = new Money(Locale.US, total);
 					view.setShowReportAmount(amount.toString());
+					
+					// update Graph
+					LinearLayout graphFrame = (LinearLayout) view.getShowReportGraphView();
+					graphFrame.removeAllViews();
+					if (model.getCurReportTransactions().size() > 0) {
+						GraphDataParser gParser = new GraphDataParser();
+						GraphViewSeries graphData = gParser.parseTransactionData(model.getCurReportTransactions());
+						LineGraphView graphView = new LineGraphView(context, "All Transaction");
+						graphView.getGraphViewStyle().setTextSize(10);
+						graphView.getGraphViewStyle().setNumHorizontalLabels(5);
+						graphView.setDrawDataPoints(true);
+						graphView.setDataPointsRadius(5f);
+						graphView.addSeries(graphData);
+						graphFrame.addView(graphView);
+						
+						graphView.setCustomLabelFormatter(new CustomLabelFormatter() {
+							@Override
+							public String formatLabel(double value, boolean isValueX) {
+								if (isValueX) {
+									Calendar calendar = Calendar.getInstance();
+									calendar.setTimeInMillis((long) value);
+									SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+									String date = sdf.format(calendar.getTime());
+									return date;
+								}
+								return null;
+							}
+						});
+					}
+					
 					// change view
 					Log.d(TAG, "JsonParser.parseReport - succeed");
 					view.setView(TypeView.SHOWREPORT);
@@ -460,6 +510,36 @@ public class MainPresenter implements Runnable {
 						// TODO: Hard coded locale
 						Money amount = new Money(Locale.US, total);
 						view.setShowReportAmount(amount.toString());
+						
+						// update Graph
+						LinearLayout graphFrame = (LinearLayout) view.getShowReportGraphView();
+						graphFrame.removeAllViews();
+						if (model.getCurReportTransactions().size() > 0) {
+							GraphDataParser gParser = new GraphDataParser();
+							GraphViewSeries graphData = gParser.parseTransactionData(model.getCurReportTransactions());
+							
+							LineGraphView graphView = new LineGraphView(context, "All Transaction");
+							graphView.getGraphViewStyle().setTextSize(10);
+							graphView.getGraphViewStyle().setNumHorizontalLabels(5);
+							graphView.setDrawDataPoints(true);
+							graphView.setDataPointsRadius(5f);
+							graphView.addSeries(graphData);
+							graphFrame.addView(graphView);
+							
+							graphView.setCustomLabelFormatter(new CustomLabelFormatter() {
+								@Override
+								public String formatLabel(double value, boolean isValueX) {
+									if (isValueX) {
+										Calendar calendar = Calendar.getInstance();
+										calendar.setTimeInMillis((long) value);
+										SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+										String date = sdf.format(calendar.getTime());
+										return date;
+									}
+									return null;
+								}
+							});
+						}
 					} else if (reportType.equals(TypeReport.INCOME)) {
 						Log.d(TAG, "reportType.equals(TypeReport.INCOME)");
 						List<Transaction> list = new ArrayList<Transaction>();
@@ -479,6 +559,35 @@ public class MainPresenter implements Runnable {
 						// TODO: Hard coded locale
 						Money amount = new Money(Locale.US, total);
 						view.setShowReportAmount(amount.toString());
+						
+						// update Graph
+						LinearLayout graphFrame = (LinearLayout) view.getShowReportGraphView();
+						graphFrame.removeAllViews();
+						if (list.size() > 0) {
+							GraphDataParser gParser = new GraphDataParser();
+							GraphViewSeries graphData = gParser.parseTransactionData(list);
+							LineGraphView graphView = new LineGraphView(context, "Income Transaction");
+							graphView.getGraphViewStyle().setTextSize(10);
+							graphView.getGraphViewStyle().setNumHorizontalLabels(5);
+							graphView.setDrawDataPoints(true);
+							graphView.setDataPointsRadius(5f);
+							graphView.addSeries(graphData);
+							graphFrame.addView(graphView);
+							
+							graphView.setCustomLabelFormatter(new CustomLabelFormatter() {
+								@Override
+								public String formatLabel(double value, boolean isValueX) {
+									if (isValueX) {
+										Calendar calendar = Calendar.getInstance();
+										calendar.setTimeInMillis((long) value);
+										SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+										String date = sdf.format(calendar.getTime());
+										return date;
+									}
+									return null;
+								}
+							});
+						}
 					} else if (reportType.equals(TypeReport.EXPENSE)) {
 						Log.d(TAG, "reportType.equals(TypeReport.EXPENSE)");
 						List<Transaction> list = new ArrayList<Transaction>();
@@ -499,6 +608,36 @@ public class MainPresenter implements Runnable {
 						// TODO: Hard coded locale
 						Money amount = new Money(Locale.US, total);
 						view.setShowReportAmount(amount.toString());
+						
+						// update Graph
+						LinearLayout graphFrame = (LinearLayout) view.getShowReportGraphView();
+						graphFrame.removeAllViews();
+						if (list.size() > 0) {
+							GraphDataParser gParser = new GraphDataParser();
+							GraphViewSeries graphData = gParser.parseTransactionData(list);
+							
+							LineGraphView graphView = new LineGraphView(context, "Outcome Transaction");
+							graphView.getGraphViewStyle().setTextSize(10);
+							graphView.getGraphViewStyle().setNumHorizontalLabels(5);
+							graphView.setDrawDataPoints(true);
+							graphView.setDataPointsRadius(5f);
+							graphView.addSeries(graphData);
+							graphFrame.addView(graphView);
+							
+							graphView.setCustomLabelFormatter(new CustomLabelFormatter() {
+								@Override
+								public String formatLabel(double value, boolean isValueX) {
+									if (isValueX) {
+										Calendar calendar = Calendar.getInstance();
+										calendar.setTimeInMillis((long) value);
+										SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+										String date = sdf.format(calendar.getTime());
+										return date;
+									}
+									return null;
+								}
+							});
+						}
 					}
 				}
 			}

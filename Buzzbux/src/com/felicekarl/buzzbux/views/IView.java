@@ -1,5 +1,7 @@
 package com.felicekarl.buzzbux.views;
 
+import android.view.TextureView;
+import android.view.View;
 import android.widget.ListView;
 
 import com.felicekarl.buzzbux.listeners.*;
@@ -34,6 +36,7 @@ public interface IView  extends UpdateLogInFragmentButtonListener,
 	public ListView getManageTransactionListView();
 	public ListView getManageReportListView();
 	public ListView getShowReportListView();
+	public View getShowReportGraphView();
 	public void fillEditTransactionForm(Transaction transaction);
 	public void setEditTransactionCurrency(String currency);
 	

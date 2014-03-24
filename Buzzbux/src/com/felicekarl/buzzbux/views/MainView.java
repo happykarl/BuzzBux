@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.TextureView;
+import android.view.View;
 import android.widget.ListView;
 
 public class MainView implements IView {
@@ -633,6 +635,11 @@ public class MainView implements IView {
 	public void updateShowReportFragmentButtonListener(
 			ShowReportFragmentButtonListener mShowReportFragmentButtonListener) {
 		mShowReportFragment.updateShowReportFragmentButtonListener(mShowReportFragmentButtonListener);
+	}
+
+	@Override
+	public View getShowReportGraphView() {
+		return mShowReportFragment.getGraphVirew();
 	}
 
 	

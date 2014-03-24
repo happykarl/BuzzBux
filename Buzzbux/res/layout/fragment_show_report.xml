@@ -82,17 +82,13 @@
         </FrameLayout>
         
         <LinearLayout
+            android:id="@+id/ll_graph"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:layout_margin="10dp"
             android:background="#222"
             android:orientation="vertical"
             android:padding="2dp" >
-            <TextureView
-                android:id="@+id/texture_view_graph"
-                android:layout_width="match_parent"
-                android:layout_height="200dp" >
-            </TextureView>
         </LinearLayout>
         
         <FrameLayout

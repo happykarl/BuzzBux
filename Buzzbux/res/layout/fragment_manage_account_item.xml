@@ -12,10 +12,14 @@
 	    android:background="#222"
 	    android:orientation="vertical"
 	    android:padding="2dp" >
-	    <TextureView
+
+	    <LinearLayout
+	        android:id="@+id/ll_graph"
 	        android:layout_width="match_parent"
-	        android:layout_height="160dp" >
-	    </TextureView>
+	        android:layout_height="160dp"
+	        android:orientation="vertical" >
+
+	    </LinearLayout>
 	    <FrameLayout 
 	        android:layout_width="match_parent"
 	        android:layout_height="70dp"

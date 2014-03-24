@@ -118,6 +118,50 @@ public class JsonParser {
 		return false;
 	}
 	
+	public static boolean parseTransactions(Account account, String str, IView view, IModel model) {
+		if (str == null)	return false;
+		try {
+			if (str.toLowerCase(Locale.US).contains("null")) {
+				return true;
+			} else {
+				JSONObject jsonObj = new JSONObject(str);
+				JSONArray transactions = jsonObj.getJSONArray(Network.TAG_OMA_TRANSACTION);
+				if (transactions.length() < 1) {
+					return true;
+				} else {
+					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+					account.removeAllItem();
+					for (int i=0; i<transactions.length(); i++) {
+						JSONObject user = transactions.getJSONObject(i);
+						String index = user.getString(Network.TAG_OMA_TRANSACTION_INDEX);
+						String accountId = user.getString(Network.TAG_OMA_TRANSACTION_ACCOUNT_ID);
+						TransType type = TransTypeParser.parseTransType(user.getString(Network.TAG_OMA_TRANSACTION_TYPE));
+						String description = user.getString(Network.TAG_OMA_TRANSACTION_DESC);
+						String dateStr = user.getString(Network.TAG_OMA_TRANSACTION_DATE);
+						Date date = null;
+						try {
+							date = df.parse(dateStr);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						int value = (int) Integer.valueOf(user.getString(Network.TAG_OMA_TRANSACTION_AMOUNT));
+						// TODO: Hard coded locale
+						Money amount = new Money(Locale.US, value);
+						Log.d(TAG, "amount: " + amount);
+						Transaction item = new Transaction(index, type, description, amount, date);
+						//Log.d(TAG, "name: " + name);
+						account.addItem(item);
+					}
+					return true;
+				}
+			}
+		} catch (JSONException e) {
+			
+		}
+		return false;
+	}
+	
 	public static boolean parseTransactions(String str, IView view, IModel model) {
 		if (str == null)	return false;
 		try {

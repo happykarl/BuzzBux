@@ -23,14 +23,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 // here's our beautiful adapter
-public class ArrayAdapterAccountItem extends ArrayAdapter<Account> {
-	private static final String TAG = ArrayAdapterAccountItem.class.getSimpleName();
+public class ArrayAdapterAccountGraphItem extends ArrayAdapter<Account> {
+	private static final String TAG = ArrayAdapterAccountGraphItem.class.getSimpleName();
 
     private Context mContext;
     private int layoutResourceId;
     private List<Account> data;
 
-    public ArrayAdapterAccountItem(Context mContext, int layoutResourceId, List<Account> data) {
+    public ArrayAdapterAccountGraphItem(Context mContext, int layoutResourceId, List<Account> data) {
 
         super(mContext, layoutResourceId, data);
 
@@ -59,6 +59,7 @@ public class ArrayAdapterAccountItem extends ArrayAdapter<Account> {
         Account item = getItem(position);
         Log.d(TAG, "item.getName(): " + item.getName() + "item.getBalance(): " + item.getBalance());
         
+        LinearLayout graphFrame = (LinearLayout) convertView.findViewById(R.id.ll_graph);
         TextView tv_account_name = (TextView) convertView.findViewById(R.id.tv_account_name);
         TextView tv_account_balance = (TextView) convertView.findViewById(R.id.tv_account_balance);
         TextView tv_account_description = (TextView) convertView.findViewById(R.id.tv_account_description);
@@ -66,6 +67,34 @@ public class ArrayAdapterAccountItem extends ArrayAdapter<Account> {
         tv_account_name.setText(item.getName());
         tv_account_balance.setText(item.getBalance().toString());
         tv_account_description.setText(item.getDescription());
+        
+        // update Graph
+		graphFrame.removeAllViews();
+		if (item.getTransactions().size() > 0) {
+			GraphDataParser gParser = new GraphDataParser();
+			GraphViewSeries graphData = gParser.parseTransactionData(item.getTransactions());
+			LineGraphView graphView = new LineGraphView(mContext, item.getName());
+			graphView.getGraphViewStyle().setTextSize(10);
+			graphView.getGraphViewStyle().setNumHorizontalLabels(5);
+			graphView.setDrawDataPoints(true);
+			graphView.setDataPointsRadius(5f);
+			graphView.addSeries(graphData);
+			graphFrame.addView(graphView);
+			
+			graphView.setCustomLabelFormatter(new CustomLabelFormatter() {
+				@Override
+				public String formatLabel(double value, boolean isValueX) {
+					if (isValueX) {
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTimeInMillis((long) value);
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						String date = sdf.format(calendar.getTime());
+						return date;
+					}
+					return null;
+				}
+			});
+		}
 
         return convertView;
 
