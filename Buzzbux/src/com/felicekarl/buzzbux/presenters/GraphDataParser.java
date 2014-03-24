@@ -53,6 +53,7 @@ public class GraphDataParser {
 			Log.d("Karl", "yValue/100d: " + yValue/100d);
 			result.appendData(new GraphViewData(t.getDate().getTime(), yValue/100d), true, 100);
 		}
+		result.appendData(new GraphViewData(t.getDate().getTime(), yValue/100d), true, 100);
 		return result;
 	}
 	
