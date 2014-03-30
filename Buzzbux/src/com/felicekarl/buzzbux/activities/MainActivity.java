@@ -35,6 +35,14 @@ public class MainActivity extends FragmentActivity {
 	    super.onResume();
 	}
 	
+	public MainModel getModel() {
+		return model;
+	}
+	
+	public MainView getView() {
+		return view;
+	}
+	
 	@Override
 	public void onBackPressed() {
 		openQuitDialog();
