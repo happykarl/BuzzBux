@@ -76,20 +76,25 @@ public class Network {
 		get_transactions_from_accounts_php = context.getResources().getString(R.string.get_transactions_from_accounts_php);
 	}
 	
+	/**
+	 * Send user's input (username and password) to AsyncTask.
+	 * In case of something wrong happens, it returns null and JSonParser will handle error.
+	 * @param username username for User Account
+	 * @param password password for User Account
+	 * @return return the result of LogIn AsyncTask. If succeed, it will return the JSon data for user account.
+	 */
 	public String submitLogIn(String username, String password) {
 		mLogInTask = new LogInTask();
 		mLogInTask.execute(new String[] {login_php, username, password});
 		try {
-			//Log.d(TAG, "result: " + login_task.get());
 			return mLogInTask.get();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 	
 	public String submitRegister(String username, String password, String firstname, String lastname) {
