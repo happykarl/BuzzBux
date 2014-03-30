@@ -27,7 +27,14 @@ public class MainActivity extends FragmentActivity {
 		view = new MainView(this);
 		model = new MainModel(this);
 		presenter = new MainPresenter(this, view, model);
-		
+	}
+	
+	public MainView getView() {
+		return view;
+	}
+	
+	public MainModel getModel() {
+		return model;
 	}
 	
 	@Override
