@@ -1,9 +1,12 @@
 package com.felicekarl.buzzbux.presenters;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
 import com.felicekarl.buzzbux.R;
+import com.felicekarl.buzzbux.models.Account;
+import com.felicekarl.buzzbux.models.Transaction;
+import com.felicekarl.buzzbux.models.User;
 import com.felicekarl.buzzbux.presenters.tasks.AddAccountsTask;
 import com.felicekarl.buzzbux.presenters.tasks.AddTransactionTask;
 import com.felicekarl.buzzbux.presenters.tasks.DeleteAccountTask;
@@ -15,14 +18,14 @@ import com.felicekarl.buzzbux.presenters.tasks.GetTransactionsFromAccountsTask;
 import com.felicekarl.buzzbux.presenters.tasks.GetTransactionsTask;
 import com.felicekarl.buzzbux.presenters.tasks.LogInTask;
 import com.felicekarl.buzzbux.presenters.tasks.RegisterTask;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 /**
  * Network.
  * @author Karl
  *
  */
-public class Network {
+@SuppressLint("SimpleDateFormat") public class Network {
 	/**
 	 * LogInTask.
 	 */
@@ -205,6 +208,10 @@ public class Network {
 	 * String "indeces[]".
 	 */
     public static final String TAG_OMA_TRANSACTION_INDECES = "indeces[]";
+    /**
+	 * String "yyyy-MM-dd".
+	 */
+    private static final String DATEFORMAT = "yyyy-MM-dd";
 	/**
 	 * Initialize PHP file addresses.
 	 * @param context Android Context
@@ -243,18 +250,10 @@ public class Network {
             return null;
         }
     }
-    /**
-	 * Send user's input (username and password) to AsyncTask.
-	 * In case of something wrong happens, it returns null and JSonParser will handle error.
-	 * @param username username for User Account
-	 * @param password password for User Account
-	 * @param firstname first name
-	 * @param lastname last name
-	 * @return return the result of Register AsyncTask. If succeed, it will return the JSon data for user account.
-	 */
-    public String submitRegister(String username, String password, String firstname, String lastname) {
+    
+    public String submitRegister(User pUser, String pPassword) {
         mRegisterTask = new RegisterTask();
-        mRegisterTask.execute(new String[] {registerPhp, username, password, firstname, lastname});
+        mRegisterTask.execute(new String[] {registerPhp, pUser.getUsername(), pPassword, pUser.getFirstname(), pUser.getLastName()});
         try {
             return mRegisterTask.get();
         } catch (InterruptedException e) {
@@ -300,17 +299,10 @@ public class Network {
         }
         return null;
     }
-    /**
-     * Send infos to add Account.
-     * @param username username want to add account
-     * @param accountName Account Name
-     * @param accountDescription Description of Account
-     * @param locale Currency Info of Account
-     * @return the result of AddAccounts AsyncTask. If succeed, it will return the JSon data for user account.
-     */
-    public String addAccount(String username, String accountName, String accountDescription, String locale) {
+    
+    public String addAccount(String username, Account pAccount) {
         mAddAccountsTask = new AddAccountsTask();
-        mAddAccountsTask.execute(new String[] {addAccountPhp, username, accountName, accountDescription, locale});
+        mAddAccountsTask.execute(new String[] {addAccountPhp, username, pAccount.getName(), pAccount.getDescription(), pAccount.getLocale().toString()});
         try {
             return mAddAccountsTask.get();
         } catch (InterruptedException e) {
@@ -320,19 +312,12 @@ public class Network {
         }
         return null;
     }
-	/**
-	 * Send infos to add Transaction.
-	 * @param accountId Account Id want to add the transaction.
-	 * @param transType Transaction Type
-	 * @param sign + if transaction is income, - if trnasaction is expense
-	 * @param amount amount of money
-	 * @param description description of Transaction
-	 * @param date date of Transaction
-	 * @return result of server of AddTransactionTask
-	 */
-    public String addTransaction(String accountId, String transType, String sign, String amount, String description, String date) {
+    
+    public String addTransaction(String accountId, String sign, Transaction transaction) {
         mAddTransactionTask = new AddTransactionTask();
-        mAddTransactionTask.execute(new String[] {addTransactionPhp, accountId, transType, sign, amount, description, date});
+        SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
+        String date = sdf.format(transaction.getDate());
+        mAddTransactionTask.execute(new String[] {addTransactionPhp, accountId, transaction.getType().toString(), sign, String.valueOf(transaction.getAmount().getValue()), transaction.getDescription(), date});
         try {
             return mAddTransactionTask.get();
         } catch (InterruptedException e) {
@@ -359,20 +344,13 @@ public class Network {
         }
         return null;
     }
-	/**
-	 * Send following info to edit Transaction.
-	 * @param transactionId Transaction Id want to edit
-	 * @param transType new Transaction type
-	 * @param accountId account id to change balance
-	 * @param amount new amount of money
-	 * @param diff difference between previous money and new money
-	 * @param description new description of transaction
-	 * @param date new date of transaction
-	 * @return result of server of EditTransactionTask
-	 */
-    public String editTransaction(String transactionId, String transType, String accountId, String amount, String diff, String description, String date) {
+    
+    public String editTransaction(String accountId, String diff, Transaction transaction) {
         mEditTransactionTask = new EditTransactionTask();
-        mEditTransactionTask.execute(new String[] {editTransactionPhp, transactionId, transType, accountId, amount, diff, description, date});
+        SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
+        String date = sdf.format(transaction.getDate());
+        mEditTransactionTask.execute(new String[] {editTransactionPhp, transaction.getId(), transaction.getType().toString(), accountId, 
+        		String.valueOf(transaction.getAmount().getValue()), diff, transaction.getDescription(), date});
         try {
             return mEditTransactionTask.get();
         } catch (InterruptedException e) {

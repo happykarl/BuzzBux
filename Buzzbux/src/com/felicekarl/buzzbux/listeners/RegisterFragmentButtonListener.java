@@ -1,4 +1,7 @@
 package com.felicekarl.buzzbux.listeners;
+
+import com.felicekarl.buzzbux.models.User;
+
 /**
  * Button Listener Interface for RegisterFragment.
  * @author Karl
@@ -7,12 +10,10 @@ package com.felicekarl.buzzbux.listeners;
 public interface RegisterFragmentButtonListener {
 	/**
 	 * Send registration info to presenter.
-	 * @param username username (unique)
-	 * @param password password
-	 * @param firstname first name
-	 * @param lastname last name
+	 * @param pUser user
+	 * @param pPassword password
 	 */
-    void submitRegister(String username, String password, String firstname, String lastname);
+    void submitRegister(User pUser, String pPassword);
     /**
      * User request to cancel registration.
      */

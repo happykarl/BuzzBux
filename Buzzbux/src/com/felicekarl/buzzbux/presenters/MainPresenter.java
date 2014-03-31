@@ -1,9 +1,12 @@
 package com.felicekarl.buzzbux.presenters;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,6 +29,7 @@ import com.felicekarl.buzzbux.models.TransType;
 import com.felicekarl.buzzbux.models.Transaction;
 import com.felicekarl.buzzbux.models.LocaleParser;
 import com.felicekarl.buzzbux.models.TransTypeParser;
+import com.felicekarl.buzzbux.models.User;
 import com.felicekarl.buzzbux.presenters.adapters.ArrayAdapterTransactionItem;
 import com.felicekarl.buzzbux.presenters.adapters.ArrayAdapterAccountGraphItem;
 import com.felicekarl.buzzbux.presenters.adapters.ArrayAdapterAccountItem;
@@ -216,13 +220,13 @@ import android.widget.LinearLayout;
         /* RegisterFragment button click listeners */
         view.updateRegisterFragmentButtonListener(new RegisterFragmentButtonListener() {
             @Override
-            public void submitRegister(String username, String password, String firstname, String lastname) {
-                view.startSpinner();
-                if (JsonParser.parseRegister(network.submitRegister(username, password, firstname, lastname), view, model)) {
+            public void submitRegister(User pUser, String pPassword) {
+            	view.startSpinner();
+                if (JsonParser.parseRegister(network.submitRegister(pUser, pPassword), view, model)) {
                     view.setView(TypeView.DASHBOARD);
                     view.setTitle(DASHBOARD);
                     // save preference
-                    editor.putString(USERNAME, username);
+                    editor.putString(USERNAME, pUser.getUsername());
                     editor.commit();
                 } else {
                     view.enablButtonListener();
@@ -234,6 +238,7 @@ import android.widget.LinearLayout;
                 view.setView(TypeView.LOGIN);
                 view.setTitle(LOGIN);
             }
+			
         });
     }
     /**
@@ -340,9 +345,8 @@ import android.widget.LinearLayout;
 			@Override
             public void submit(String accountName, String accountDescription, String currency) {
                 view.startSpinner();
-                if (JsonParser.parseAddAccount(network.addAccount(model.getCurUser().getUsername(), 
-						accountName, accountDescription, LocaleParser.parseLocale(currency).toString()), 
-						view, model)) {
+                Account account = new Account(null, accountName, accountDescription, LocaleParser.parseLocale(currency), 0);
+                if (JsonParser.parseAddAccount(network.addAccount(model.getCurUser().getUsername(), account), view, model)) {
 					// update list
                     Collections.sort(model.getCurUserAccounts());
                     view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
@@ -373,12 +377,10 @@ import android.widget.LinearLayout;
             public void submit(String transType, String amount, String description, Calendar calendar) {
                 view.startSpinner();
                 TransType type = TransTypeParser.parseTransType(transType);
-                SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
-                String date = sdf.format(calendar.getTime());
+                Money money = new Money(model.getCurAccount().getLocale(), (int) Integer.valueOf(amount));
+                Transaction transaction = new Transaction(null, type, description, money, calendar.getTime());
                 if (JsonParser.parseAddTransaction(network.addTransaction(
-						model.getCurAccount().getId(), type.toString(), 
-						TransTypeParser.parseSign(type), amount, description, date), 
-						view, model)) {
+						model.getCurAccount().getId(), TransTypeParser.parseSign(type), transaction), view, model)) {
                     Collections.sort(model.getCurAccount().getTransactions());
                     view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
 							context, R.layout.fragment_manage_transaction_item, 
@@ -466,10 +468,9 @@ import android.widget.LinearLayout;
                 }
 				
                 String diff = String.valueOf(newAmount - prevAmount);
-				
-                if (JsonParser.parseEditTransaction(network.editTransaction(
-						model.getCurTransaction().getId(), type.toString(), 
-						model.getCurAccount().getId(), amount, diff, description, date), view, model)) {
+                Money money = new Money(model.getCurAccount().getLocale(), (int) Integer.valueOf(amount));
+				Transaction transaction = new Transaction(model.getCurTransaction().getId(), type, description, money, calendar.getTime());
+                if (JsonParser.parseEditTransaction(network.editTransaction(model.getCurAccount().getId(), diff, transaction), view, model)) {
 					// update transaction list
                     Collections.sort(model.getCurAccount().getTransactions());
                     view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(

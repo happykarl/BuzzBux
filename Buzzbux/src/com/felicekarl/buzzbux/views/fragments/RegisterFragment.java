@@ -3,6 +3,7 @@ package com.felicekarl.buzzbux.views.fragments;
 import com.felicekarl.buzzbux.R;
 import com.felicekarl.buzzbux.listeners.RegisterFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.UpdateRegisterFragmentButtonListener;
+import com.felicekarl.buzzbux.models.User;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -162,11 +163,8 @@ public class RegisterFragment extends AbstractBaseFragment implements OnClickLis
                     setErrorMsg("");
                     if (mRegisterFragmentButtonListener != null) {
                         disableButtonListener();
-                        mRegisterFragmentButtonListener.submitRegister(
-							etUsername.getText().toString().trim(), 
-							etPassword.getText().toString().trim(), 
-							etFirstName.getText().toString().trim(), 
-							etLastName.getText().toString().trim());
+                        User user = new User(etUsername.getText().toString().trim(), etFirstName.getText().toString().trim(), etLastName.getText().toString().trim());
+                        mRegisterFragmentButtonListener.submitRegister(user, etPassword.getText().toString().trim());
 					
                     }
                 }

@@ -113,7 +113,7 @@ public class MainView implements IView {
 	 * Save Android context in MainView.
 	 * @param context Android Context
 	 */
-    public MainView(Context context) {
+    public MainView(final Context context) {
 		/* shared preference */
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         editor = preferences.edit();
