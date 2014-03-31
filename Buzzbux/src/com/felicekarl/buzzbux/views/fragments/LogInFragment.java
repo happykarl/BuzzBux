@@ -22,7 +22,7 @@ public class LogInFragment extends AbstractBaseFragment implements OnClickListen
 	/**
 	 * String "username".
 	 */
-	private static final String ARG_USERNAME = "username";
+    private static final String ARG_USERNAME = "username";
 	/**
 	 * Username holder.
 	 */
@@ -75,6 +75,7 @@ public class LogInFragment extends AbstractBaseFragment implements OnClickListen
     }
     /**
 	 * Create LogInFragment instance.
+	 * @param username username to be shown on the TextView.
 	 * @return LogInFragment
 	 */
     public static LogInFragment create(String username) {

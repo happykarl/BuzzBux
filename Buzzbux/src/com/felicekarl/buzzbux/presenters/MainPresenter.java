@@ -1,12 +1,9 @@
 package com.felicekarl.buzzbux.presenters;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -161,10 +158,10 @@ import android.widget.LinearLayout;
         view.updateFooterFragmentButtonListener(new FooterFragmentButtonListener() {
     	    @Override
             public void addItem() {
-                if (view.getView().equals(TypeView.MANAGEACCOUNT)) {
+                if (view.getCurTypeView().equals(TypeView.MANAGEACCOUNT)) {
                     view.setView(TypeView.ADDACCOUNT);
                     view.setTitle("Add Account");
-                } else if (view.getView().equals(TypeView.MANAGETRANSACTION)) {
+                } else if (view.getCurTypeView().equals(TypeView.MANAGETRANSACTION)) {
                     view.setView(TypeView.ADDTRANSACTION);
                     view.setAddTransactionCurrency(model.getCurAccount().getLocale().toString());
                     view.setTitle("Add Transaction");
@@ -173,9 +170,9 @@ import android.widget.LinearLayout;
 
             @Override
             public void editItem() {
-                if (view.getView().equals(TypeView.MANAGEACCOUNT)) {
+                if (view.getCurTypeView().equals(TypeView.MANAGEACCOUNT)) {
                     // TODO: Edit Account Mode
-                } else if (view.getView().equals(TypeView.MANAGETRANSACTION)) {
+                } else if (view.getCurTypeView().equals(TypeView.MANAGETRANSACTION)) {
                     if (model.getCurTransaction() != null) {
                         view.setView(TypeView.EDITTRANSACTION);
                         view.setEditTransactionCurrency(model.getCurAccount().getLocale().toString());
@@ -254,7 +251,7 @@ import android.widget.LinearLayout;
                 view.stopSpinner();
             }
             @SuppressWarnings("unchecked")
-			@Override
+            @Override
             public void submitManageAccount() {
                 view.startSpinner();
                 if (JsonParser.parseAccounts(network.getAccounts(
@@ -265,7 +262,7 @@ import android.widget.LinearLayout;
                     for (Account a : model.getCurUserAccounts()) {
                         if (JsonParser.parseTransactions(a, network.getTransactions(a.getId()), view, model)) {
                             // update list
-                            Collections.sort(a.getTransactions());
+                            Collections.sort(a.getList());
                         }
                     }
                     view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
@@ -279,7 +276,7 @@ import android.widget.LinearLayout;
                 view.stopSpinner();
             }
             @SuppressWarnings("unchecked")
-			@Override
+            @Override
             public void submitReportTransaction() {
                 view.startSpinner();
                 if (JsonParser.parseAccounts(network.getAccounts(
@@ -309,20 +306,20 @@ import android.widget.LinearLayout;
 		/* ManageAccountFragment button click listeners */
         view.updateManageAccountFragmentButtonListener(new ManageAccountFragmentButtonListener() {
             @SuppressWarnings("unchecked")
-			@Override
+            @Override
             public void selectAccount(int position) {
                 view.startSpinner();
 				// set cur account as selected one
-                Account account = model.getCurUser().getAccounts().get(position);
+                Account account = model.getCurUser().getList().get(position);
                 model.setCurAccount(account);
 				// reset cur transaction as null
                 model.setCurTransaction(null);
                 if (JsonParser.parseTransactions(network.getTransactions(account.getId()), view, model)) {
 					// update list
-                    Collections.sort(model.getCurAccount().getTransactions());
+                    Collections.sort(model.getCurAccount().getList());
                     view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
 							context, R.layout.fragment_manage_transaction_item, 
-							model.getCurAccount().getTransactions()));
+							model.getCurAccount().getList()));
 					// update balance in ManageTransaction view
                     view.setManageTransactionBalance(model.getCurAccount().getBalance().toString());
 					// change view
@@ -342,7 +339,7 @@ import android.widget.LinearLayout;
         /* AddAccountFragment button click listeners */
         view.updateAddAccountFragmentButtonListener(new AddAccountFragmentButtonListener() {
             @SuppressWarnings("unchecked")
-			@Override
+            @Override
             public void submit(String accountName, String accountDescription, String currency) {
                 view.startSpinner();
                 Account account = new Account(null, accountName, accountDescription, LocaleParser.parseLocale(currency), 0);
@@ -373,7 +370,7 @@ import android.widget.LinearLayout;
 		/* AddTransactionFragment button click listeners */
         view.updateAddTransactionFragmentButtonListener(new AddTransactionFragmentButtonListener() {
             @SuppressWarnings("unchecked")
-			@Override
+            @Override
             public void submit(String transType, String amount, String description, Calendar calendar) {
                 view.startSpinner();
                 TransType type = TransTypeParser.parseTransType(transType);
@@ -381,10 +378,10 @@ import android.widget.LinearLayout;
                 Transaction transaction = new Transaction(null, type, description, money, calendar.getTime());
                 if (JsonParser.parseAddTransaction(network.addTransaction(
 						model.getCurAccount().getId(), TransTypeParser.parseSign(type), transaction), view, model)) {
-                    Collections.sort(model.getCurAccount().getTransactions());
+                    Collections.sort(model.getCurAccount().getList());
                     view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
 							context, R.layout.fragment_manage_transaction_item, 
-							model.getCurAccount().getTransactions()));
+							model.getCurAccount().getList()));
 					
                     Money balance = new Money(model.getCurAccount().getLocale(), 
 							(int) Integer.valueOf(network.getBalance(model.getCurAccount().getId())));
@@ -417,11 +414,11 @@ import android.widget.LinearLayout;
         view.updateManageTransactionFragmentButtonListener(new ManageTransactionFragmentButtonListener() {
             @Override
             public void selectTransaction(int position) {
-                Transaction transaction = model.getCurAccount().getTransactions().get(position);
+                Transaction transaction = model.getCurAccount().getList().get(position);
                 model.setCurTransaction(transaction);
             }
             @SuppressWarnings("unchecked")
-			@Override
+            @Override
             public void delete() {
                 view.startSpinner();
                 String result = network.deleteAccount(model.getCurAccount().getId());
@@ -449,7 +446,7 @@ import android.widget.LinearLayout;
 		/* EditTransaction button click listener */
         view.updateEditTransactionFragmentButtonListener(new EditTransactionFragmentButtonListener() {
             @SuppressWarnings("unchecked")
-			@Override
+            @Override
             public void submit(String transType, String amount, String description, Calendar calendar) {
                 view.startSpinner();
                 TransType type = TransTypeParser.parseTransType(transType);
@@ -469,13 +466,13 @@ import android.widget.LinearLayout;
 				
                 String diff = String.valueOf(newAmount - prevAmount);
                 Money money = new Money(model.getCurAccount().getLocale(), (int) Integer.valueOf(amount));
-				Transaction transaction = new Transaction(model.getCurTransaction().getId(), type, description, money, calendar.getTime());
+            	Transaction transaction = new Transaction(model.getCurTransaction().getIndex(), type, description, money, calendar.getTime());
                 if (JsonParser.parseEditTransaction(network.editTransaction(model.getCurAccount().getId(), diff, transaction), view, model)) {
 					// update transaction list
-                    Collections.sort(model.getCurAccount().getTransactions());
+                    Collections.sort(model.getCurAccount().getList());
                     view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
 							context, R.layout.fragment_manage_transaction_item, 
-							model.getCurAccount().getTransactions()));
+							model.getCurAccount().getList()));
 					// update balance
                     Money balance = new Money(model.getCurAccount().getLocale(), 
 							(int) Integer.valueOf(network.getBalance(model.getCurAccount().getId())));
@@ -499,7 +496,7 @@ import android.widget.LinearLayout;
                 view.setTitle(model.getCurAccount().getName());
             }
             @SuppressWarnings("unchecked")
-			@Override
+            @Override
             public void delete() {
                 view.startSpinner();
                 String prevType = TransTypeParser.parseSign(model.getCurTransaction().getType());
@@ -509,14 +506,14 @@ import android.widget.LinearLayout;
                 }
                 String diff = String.valueOf(0 - prevAmount);
                 try {
-                    int value = (int) Integer.valueOf(network.deleteTransaction(model.getCurTransaction().getId(), 
+                    int value = (int) Integer.valueOf(network.deleteTransaction(model.getCurTransaction().getIndex(), 
 							model.getCurAccount().getId(), diff));
                     if ( model.deleteTransaction(model.getCurAccount(), model.getCurTransaction()) ) {
 						// update transaction list
-                        Collections.sort(model.getCurAccount().getTransactions());
+                        Collections.sort(model.getCurAccount().getList());
                         view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
 								context, R.layout.fragment_manage_transaction_item, 
-								model.getCurAccount().getTransactions()));
+								model.getCurAccount().getList()));
 						// update balance
                         Money balance = new Money(model.getCurAccount().getLocale(), value);
                         model.getCurAccount().setBalance(balance);
@@ -546,23 +543,23 @@ import android.widget.LinearLayout;
 		/* add ManageReportFragment button listener */
         view.updateManageReportFragmentButtonListener(new ManageReportFragmentButtonListener() {
             @SuppressWarnings("unchecked")
-			@Override
+            @Override
             public void submit(List<Integer> selectedItemPosition, Calendar dateFrom, Calendar dateTo) {
                 view.startSpinner();
                 List<Integer> idList = new ArrayList<Integer>(); 
                 for (Integer i : selectedItemPosition) {
-                    idList.add(Integer.valueOf(model.getCurUser().getAccounts().get(i).getId()));
+                    idList.add(Integer.valueOf(model.getCurUser().getList().get(i).getId()));
                 }
                 SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
                 if (JsonParser.parseReport(network.getTransactions(idList, sdf.format(dateFrom.getTime()), sdf.format(dateTo.getTime())), view, model)) {
                     // update transaction list
-                    Collections.sort(model.getCurReportTransactions());
+                    Collections.sort(model.getReportTransactions());
                     view.getShowReportListView().setAdapter(new ArrayAdapterTransactionItem(
 							context, R.layout.fragment_manage_transaction_item, 
-							model.getCurReportTransactions()));
+							model.getReportTransactions()));
 					// calculate amount
                     int total = 0;
-                    for (Transaction t : model.getCurReportTransactions()) {
+                    for (Transaction t : model.getReportTransactions()) {
                         total += t.getSignedValue();
                     }
 					// TODO: Hard coded locale
@@ -572,9 +569,9 @@ import android.widget.LinearLayout;
 					// update Graph
                     LinearLayout graphFrame = (LinearLayout) view.getShowReportGraphView();
                     graphFrame.removeAllViews();
-                    if (model.getCurReportTransactions().size() > 0) {
+                    if (model.getReportTransactions().size() > 0) {
                         GraphDataParser gParser = new GraphDataParser();
-                        GraphViewSeries graphData = gParser.parseTransactionData(model.getCurReportTransactions());
+                        GraphViewSeries graphData = gParser.parseTransactionData(model.getReportTransactions());
                         LineGraphView graphView = new LineGraphView(context, ALLTRANSACTIONS);
                         graphView.getGraphViewStyle().setTextSize(10);
                         graphView.getGraphViewStyle().setNumHorizontalLabels(5);
@@ -615,14 +612,14 @@ import android.widget.LinearLayout;
         view.updateShowReportFragmentButtonListener(new ShowReportFragmentButtonListener() {
             @Override
             public void setReportType(TypeReport reportType) {
-                if (model.getCurReportTransactions() != null) {
+                if (model.getReportTransactions() != null) {
                     if (reportType.equals(TypeReport.ALL)) {
                         view.getShowReportListView().setAdapter(new ArrayAdapterTransactionItem(
 								context, R.layout.fragment_manage_transaction_item, 
-								model.getCurReportTransactions()));
+								model.getReportTransactions()));
 						// calculate amount
                         int total = 0;
-                        for (Transaction t : model.getCurReportTransactions()) {
+                        for (Transaction t : model.getReportTransactions()) {
                             total += t.getSignedValue();
                         }
 						// TODO: Hard coded locale
@@ -632,9 +629,9 @@ import android.widget.LinearLayout;
 						// update Graph
                         LinearLayout graphFrame = (LinearLayout) view.getShowReportGraphView();
                         graphFrame.removeAllViews();
-                        if (model.getCurReportTransactions().size() > 0) {
+                        if (model.getReportTransactions().size() > 0) {
                             GraphDataParser gParser = new GraphDataParser();
-                            GraphViewSeries graphData = gParser.parseTransactionData(model.getCurReportTransactions());
+                            GraphViewSeries graphData = gParser.parseTransactionData(model.getReportTransactions());
 							
                             LineGraphView graphView = new LineGraphView(context, ALLTRANSACTIONS);
                             graphView.getGraphViewStyle().setTextSize(10);
@@ -660,7 +657,7 @@ import android.widget.LinearLayout;
                         }
                     } else if (reportType.equals(TypeReport.INCOME)) {
                         List<Transaction> list = new ArrayList<Transaction>();
-                        for (Transaction t : model.getCurReportTransactions()) {
+                        for (Transaction t : model.getReportTransactions()) {
                             TransType type = t.getType();
                             if ( type.equals(TransType.DEPOSIT) || type.equals(TransType.REFUND) ) {
                                 list.add(t);
@@ -707,7 +704,7 @@ import android.widget.LinearLayout;
                         }
                     } else if (reportType.equals(TypeReport.EXPENSE)) {
                         List<Transaction> list = new ArrayList<Transaction>();
-                        for (Transaction t : model.getCurReportTransactions()) {
+                        for (Transaction t : model.getReportTransactions()) {
                             TransType type = t.getType();
                             if ( type.equals(TransType.WITHDRAWAL) || type.equals(TransType.DEBIT) || type.equals(TransType.CREDIT) || type.equals(TransType.VOID) ) {
                                 list.add(t);

@@ -68,6 +68,7 @@ import android.widget.TextView;
     }
     /**
 	 * Return size of data.
+	 * @return size of data
 	 */
     public int getCount() {
         return data.size();

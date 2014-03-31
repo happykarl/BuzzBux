@@ -105,11 +105,12 @@ public abstract class AbstractBaseFragment extends Fragment {
     }
 	/**
 	 * Toggle Fragment.
-	 * @param isOnStage true if fragment want to be shown on the window.
+	 * @param pIsOnStage true if fragment want to be shown on the window.
 	 * @param isAnimation true if want to animation
 	 * @param direction direction of animation (not usable when isAnimation is false)
 	 */
-    public void toggle(boolean isOnStage, boolean isAnimation, DIRECTION direction) {
+    public void toggle(boolean pIsOnStage, boolean isAnimation, DIRECTION direction) {
+    	isOnStage = pIsOnStage;
         if (isOnStage) {
             if (isAnimation) {
                 if (direction.equals(DIRECTION.TOP)) {

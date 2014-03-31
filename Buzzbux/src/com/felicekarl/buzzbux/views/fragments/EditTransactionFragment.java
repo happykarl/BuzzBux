@@ -34,7 +34,7 @@ public class EditTransactionFragment extends AbstractBaseFragment implements OnC
     /**
      * EditTransactionFragmentButtonListener.
      */
-	private EditTransactionFragmentButtonListener mEditTransactionFragmentButtonListener;
+    private EditTransactionFragmentButtonListener mEditTransactionFragmentButtonListener;
 	/**
 	 * Transaction Amount EditText.
 	 */
@@ -323,8 +323,7 @@ public class EditTransactionFragment extends AbstractBaseFragment implements OnC
                     }
                     spTransType.setSelection(position);
                     amount = transaction.getAmount();
-                    Money amount = transaction.getAmount();
-                    etTransAmount.setText(amount.toString());
+                    etTransAmount.setText(transaction.getAmount().toString());
                     String description = transaction.getDescription();
                     etTransDescription.setText(description);
                     calendar = Calendar.getInstance();

@@ -61,10 +61,10 @@ public interface IModel {
      * Set the list of Transaction for making report.
      * @param list list of Transaction to be shown on the report.
      */
-    void setCurReportTransactions(List<Transaction> list);
+    void setReportTransactions(List<Transaction> list);
     /**
      * Get the list of Transaction for making report.
      * @return list of Transaction for making report.
      */
-    List<Transaction> getCurReportTransactions();
+    List<Transaction> getReportTransactions();
 }

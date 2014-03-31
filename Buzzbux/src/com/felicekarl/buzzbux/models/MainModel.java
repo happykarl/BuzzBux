@@ -46,7 +46,7 @@ public class MainModel implements IModel {
 	
     @Override
     public ArrayList<Account> getCurUserAccounts() {
-        return curUser.getAccounts();
+        return curUser.getList();
     }
 	
     @Override
@@ -76,23 +76,23 @@ public class MainModel implements IModel {
 	
     @Override
     public boolean deleteTransaction(Account account, Transaction transaction) {
-        ArrayList<Transaction> list = (ArrayList<Transaction>) account.getTransactions();
+        ArrayList<Transaction> list = (ArrayList<Transaction>) account.getList();
         return list.remove(transaction);
     }
 	
     @Override
     public boolean deleteAccount(User user, Account account) {
-        ArrayList<Account> list = user.getAccounts();
+        ArrayList<Account> list = user.getList();
         return list.remove(account);
     }
 	
     @Override
-    public void setCurReportTransactions(List<Transaction> list) {
+    public void setReportTransactions(List<Transaction> list) {
         this.reportTransactions = list;
     }
     
     @Override
-    public List<Transaction> getCurReportTransactions() {
+    public List<Transaction> getReportTransactions() {
         return reportTransactions;
     }
 }

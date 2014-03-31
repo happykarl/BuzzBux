@@ -46,7 +46,7 @@ public class Transaction implements Comparable {
 	 * Get Index of Transaction (unique).
 	 * @return Index of Transaction (unique)
 	 */
-    public String getId() {
+    public String getIndex() {
         return index;
     }
 	/**

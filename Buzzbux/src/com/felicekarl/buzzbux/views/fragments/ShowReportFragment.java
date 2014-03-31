@@ -184,7 +184,7 @@ public class ShowReportFragment extends AbstractBaseFragment implements OnClickL
      * Get ListView of Transaction.
      * @return ListView of Transaction
      */
-    public ListView getListView() {
+    public ListView getLvListTransaction() {
         return lvListTransaction;
     }
 	
@@ -192,7 +192,7 @@ public class ShowReportFragment extends AbstractBaseFragment implements OnClickL
      * Get GraphView.
      * @return GraphView
      */
-    public View getGraphVirew() {
+    public View getLlGraph() {
         return llGraph;
     }
 

@@ -29,7 +29,7 @@ public class AddTransactionFragment extends AbstractBaseFragment implements OnCl
     /**
      * AddTransactionFragmentButtonListener.
      */
-	private AddTransactionFragmentButtonListener mAddTransactionFragmentButtonListener;
+    private AddTransactionFragmentButtonListener mAddTransactionFragmentButtonListener;
 	/**
 	 * Transaction Amount EditText.
 	 */

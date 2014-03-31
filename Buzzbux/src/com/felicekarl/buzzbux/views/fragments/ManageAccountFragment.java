@@ -90,7 +90,7 @@ public class ManageAccountFragment extends AbstractBaseFragment implements OnCli
      * Get ListView of Account.
      * @return ListView of Account
      */
-    public ListView getListView() {
+    public ListView getLvListAccount() {
         return lvListAccount;
     }
 

@@ -35,7 +35,7 @@ public interface IView  extends UpdateLogInFragmentButtonListener,
      * Get CurrentView.
      * @return CurrentView
      */
-    TypeView getView();
+    TypeView getCurTypeView();
     /**
      * Close Menu.
      */

@@ -189,9 +189,9 @@ public class ManageTransactionFragment extends AbstractBaseFragment implements O
 	
     /**
      * Get ListView of Transaction.
-     * @return
+     * @return lvListTransaction
      */
-    public ListView getListView() {
+    public ListView getLvListTransaction() {
         return lvListTransaction;
     }
 

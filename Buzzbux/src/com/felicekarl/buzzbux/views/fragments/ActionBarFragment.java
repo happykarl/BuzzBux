@@ -183,22 +183,22 @@ public class ActionBarFragment extends AbstractBaseFragment implements Runnable,
         closeVirtualKeyboard();
         switch(v.getId()) {
             case R.id.iv_menu:
-                if (iView.getView().equals(TypeView.MANAGETRANSACTION)) {
+                if (iView.getCurTypeView().equals(TypeView.MANAGETRANSACTION)) {
                     iView.setView(TypeView.MANAGEACCOUNT);
                     iView.setTitle("Manage Account");
-                } else if (iView.getView().equals(TypeView.MANAGEACCOUNT)) {
+                } else if (iView.getCurTypeView().equals(TypeView.MANAGEACCOUNT)) {
                     iView.setView(TypeView.DASHBOARD);
                     iView.setTitle(DASHBOARD);
-                } else if (iView.getView().equals(TypeView.MANAGEREPORT)) {
+                } else if (iView.getCurTypeView().equals(TypeView.MANAGEREPORT)) {
                     iView.setView(TypeView.DASHBOARD);
                     iView.setTitle(DASHBOARD);
-                } else if (iView.getView().equals(TypeView.SHOWREPORT)) {
+                } else if (iView.getCurTypeView().equals(TypeView.SHOWREPORT)) {
                     iView.setView(TypeView.MANAGEREPORT);
                     iView.setTitle("Manage Report");
                 }
                 break;
             case R.id.bt_logoff:
-            	if (!iView.getView().equals(TypeView.LOGIN) && !iView.getView().equals(TypeView.REGISTER)) {
+            	if (!iView.getCurTypeView().equals(TypeView.LOGIN) && !iView.getCurTypeView().equals(TypeView.REGISTER)) {
                     confirmLogOffDialog();
                 }
             	break;
