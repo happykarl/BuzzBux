@@ -21,7 +21,7 @@ public class MainActivity extends FragmentActivity {
 	 * Presenter.
 	 */
     @SuppressWarnings("unused")
-	private MainPresenter presenter;
+    private MainPresenter presenter;
     /**
      * View.
      */

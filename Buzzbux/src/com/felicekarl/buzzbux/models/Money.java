@@ -61,8 +61,8 @@ public class Money {
     	DecimalFormat df = new DecimalFormat(symbol + "#,##0.00;-" + symbol + "#,##0.00");
     	if (locale.equals(Locale.US)) {
             return df.format(value / 100.0f);
-        } else if (locale.equals(Locale.KOREA)) {
-        	return df.format(value);
+    	} else if (locale.equals(Locale.KOREA)) {
+            return df.format(value);
         }
     	return null;
     }

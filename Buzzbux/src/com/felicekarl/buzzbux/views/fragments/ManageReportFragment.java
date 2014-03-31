@@ -340,9 +340,9 @@ import android.widget.DatePicker.OnDateChangedListener;
 	
     /**
      * Get ListView of Account.
-     * @return
+     * @return lvListAccount
      */
-    public ListView getListView() {
+    public ListView getLvListAccount() {
         return lvListAccount;
     }
 

@@ -108,7 +108,7 @@ public class User {
 	 * Get All the items of Account.
 	 * @return list of Accounts
 	 */
-    public ArrayList<Account> getAccounts() {
+    public ArrayList<Account> getList() {
         return list;
     }
 	 

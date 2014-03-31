@@ -450,7 +450,7 @@ import com.felicekarl.buzzbux.views.IView;
 								description, amount, date);
                         list.add(item);
                     }
-                    model.setCurReportTransactions(list);
+                    model.setReportTransactions(list);
                     return true;
                 }
             }

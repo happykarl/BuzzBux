@@ -23,7 +23,7 @@ public class RegisterFragment extends AbstractBaseFragment implements OnClickLis
     /**
      * RegisterFragmentButtonListener.
      */
-	private RegisterFragmentButtonListener mRegisterFragmentButtonListener;
+    private RegisterFragmentButtonListener mRegisterFragmentButtonListener;
     /**
 	 * Username EditText.
 	 */

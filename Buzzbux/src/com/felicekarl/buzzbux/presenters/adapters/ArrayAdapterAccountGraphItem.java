@@ -71,9 +71,9 @@ public class ArrayAdapterAccountGraphItem extends ArrayAdapter<Account> {
         
         // update Graph
         graphFrame.removeAllViews();
-        if (item.getTransactions().size() > 0) {
+        if (item.getList().size() > 0) {
             GraphDataParser gParser = new GraphDataParser();
-            GraphViewSeries graphData = gParser.parseTransactionData(item.getTransactions());
+            GraphViewSeries graphData = gParser.parseTransactionData(item.getList());
             LineGraphView graphView = new LineGraphView(mContext, item.getName());
             graphView.getGraphViewStyle().setTextSize(10);
             graphView.getGraphViewStyle().setNumHorizontalLabels(5);
@@ -100,6 +100,7 @@ public class ArrayAdapterAccountGraphItem extends ArrayAdapter<Account> {
     }
 	/**
 	 * Return size of data.
+	 * @return size of data
 	 */
     public int getCount() {
         return data.size();

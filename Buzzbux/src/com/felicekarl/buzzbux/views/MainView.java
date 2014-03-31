@@ -521,7 +521,7 @@ public class MainView implements IView {
     }
 
     @Override
-    public TypeView getView() {
+    public TypeView getCurTypeView() {
         return curTypeView;
     }
 
@@ -600,12 +600,12 @@ public class MainView implements IView {
 
     @Override
     public ListView getManageAccountListView() {
-        return mManageAccountFragment.getListView();
+        return mManageAccountFragment.getLvListAccount();
     }
 
     @Override
     public ListView getManageTransactionListView() {
-        return mManageTransactionFragment.getListView();
+        return mManageTransactionFragment.getLvListTransaction();
     }
 
     @Override
@@ -670,7 +670,7 @@ public class MainView implements IView {
 
     @Override
     public ListView getManageReportListView() {
-        return mManageReportFragment.getListView();
+        return mManageReportFragment.getLvListAccount();
     }
 
     @Override
@@ -681,7 +681,7 @@ public class MainView implements IView {
 
     @Override
     public ListView getShowReportListView() {
-        return mShowReportFragment.getListView();
+        return mShowReportFragment.getLvListTransaction();
     }
 
     @Override
@@ -697,7 +697,7 @@ public class MainView implements IView {
 
     @Override
     public View getShowReportGraphView() {
-        return mShowReportFragment.getGraphVirew();
+        return mShowReportFragment.getLlGraph();
     }
 
 }

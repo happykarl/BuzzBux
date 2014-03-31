@@ -62,6 +62,7 @@ public class ArrayAdapterAccountItem extends ArrayAdapter<Account> {
     }
     /**
 	 * Return size of data.
+	 * @return size of data
 	 */
     public int getCount() {
         return data.size();

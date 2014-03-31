@@ -247,8 +247,8 @@ public class FooterFragment extends AbstractBaseFragment implements OnClickListe
 
     @Override
     public void updateFooterFragmentButtonListener(
-			FooterFragmentButtonListener mFooterFragmentButtonListener) {
-        this.mFooterFragmentButtonListener = mFooterFragmentButtonListener;
+			FooterFragmentButtonListener pFooterFragmentButtonListener) {
+        mFooterFragmentButtonListener = pFooterFragmentButtonListener;
     }
 
     @Override

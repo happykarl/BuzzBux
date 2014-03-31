@@ -130,7 +130,7 @@ public class Account implements Comparable {
 	 * Return the List of Transaction.
 	 * @return List of Transaction.
 	 */
-    public List<Transaction> getTransactions() {
+    public List<Transaction> getList() {
         return list;
     }
     @Override

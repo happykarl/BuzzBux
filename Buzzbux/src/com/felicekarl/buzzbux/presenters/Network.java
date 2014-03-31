@@ -250,7 +250,12 @@ import android.content.Context;
             return null;
         }
     }
-    
+    /**
+     * Send UserInfo to RegisterTask.
+     * @param pUser User instance holding user info.
+     * @param pPassword password for User Account.
+     * @return result of RegisterTask
+     */
     public String submitRegister(User pUser, String pPassword) {
         mRegisterTask = new RegisterTask();
         mRegisterTask.execute(new String[] {registerPhp, pUser.getUsername(), pPassword, pUser.getFirstname(), pUser.getLastName()});
@@ -299,7 +304,12 @@ import android.content.Context;
         }
         return null;
     }
-    
+    /**
+     * Send info to AddAccountsTask for Adding Account.
+     * @param username username (unique)
+     * @param pAccount Account
+     * @return result of AddAccountsTask
+     */
     public String addAccount(String username, Account pAccount) {
         mAddAccountsTask = new AddAccountsTask();
         mAddAccountsTask.execute(new String[] {addAccountPhp, username, pAccount.getName(), pAccount.getDescription(), pAccount.getLocale().toString()});
@@ -312,7 +322,13 @@ import android.content.Context;
         }
         return null;
     }
-    
+    /**
+     * Send info to AddTransactionTask.
+     * @param accountId Account Id
+     * @param sign + if transaction is income, - if transaction is expense
+     * @param transaction Transaction info
+     * @return result of AddTransactionTask
+     */
     public String addTransaction(String accountId, String sign, Transaction transaction) {
         mAddTransactionTask = new AddTransactionTask();
         SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
@@ -344,12 +360,18 @@ import android.content.Context;
         }
         return null;
     }
-    
+    /**
+     * Send info to EditTransactionTask.
+     * @param accountId Account Id
+     * @param diff Difference of Money between Previous and New Transaction
+     * @param transaction Transaction Info
+     * @return result of EditTransactionTask
+     */
     public String editTransaction(String accountId, String diff, Transaction transaction) {
         mEditTransactionTask = new EditTransactionTask();
         SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
         String date = sdf.format(transaction.getDate());
-        mEditTransactionTask.execute(new String[] {editTransactionPhp, transaction.getId(), transaction.getType().toString(), accountId, 
+        mEditTransactionTask.execute(new String[] {editTransactionPhp, transaction.getIndex(), transaction.getType().toString(), accountId, 
         		String.valueOf(transaction.getAmount().getValue()), diff, transaction.getDescription(), date});
         try {
             return mEditTransactionTask.get();
