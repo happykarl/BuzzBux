@@ -19,47 +19,51 @@ import org.apache.http.message.BasicNameValuePair;
 import com.felicekarl.buzzbux.presenters.Network;
 
 import android.os.AsyncTask;
-
+/**
+ * DeleteAccountTask.
+ * @author Karl
+ *
+ */
 public class DeleteAccountTask extends AsyncTask<String, Void, String> {
-	@SuppressWarnings("unused")
-	private static final String TAG = DeleteAccountTask.class.getSimpleName();
-	
-	@Override
-	protected String doInBackground(String... params) {
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost(params[0]);
+    @Override
+    protected String doInBackground(String... params) {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost(params[0]);
 		
-		String jsonResult = "";
+        String jsonResult = "";
 		
 		/* add post data*/
-		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(params.length-1);
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(params.length - 1);
         nameValuePairs.add(new BasicNameValuePair(Network.TAG_OMA_ACCOUNT_INDEX, params[1]));
         
-		try {
-			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			HttpResponse response = httpclient.execute(httppost);
-			jsonResult = inputStreamToString(response.getEntity().getContent()).toString();
-			
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return jsonResult;
-	}
-	
-	private StringBuilder inputStreamToString(InputStream is) {
-		String rLine = "";
-		StringBuilder answer = new StringBuilder();
-		BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+        try {
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpclient.execute(httppost);
+            jsonResult = inputStreamToString(response.getEntity().getContent()).toString();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return jsonResult;
+    }
+    /**
+	 * String builder from InputStream.
+	 * @param is inputStream
+	 * @return built String
+	 */
+    private StringBuilder inputStreamToString(InputStream is) {
+        String rLine = "";
+        StringBuilder answer = new StringBuilder();
+        BufferedReader rd = new BufferedReader(new InputStreamReader(is));
  
-		try {
-			while ((rLine = rd.readLine()) != null) {
-				answer.append(rLine);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return answer;
-	}
+        try {
+            while ((rLine = rd.readLine()) != null) {
+                answer.append(rLine);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return answer;
+    }
 }

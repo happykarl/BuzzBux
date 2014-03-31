@@ -1,11 +1,15 @@
 package com.felicekarl.buzzbux.listeners;
 
-import java.util.Calendar;
-import java.util.List;
-
 import com.felicekarl.buzzbux.views.fragments.ShowReportFragment.TypeReport;
-
+/**
+ * Button Listener Interface for ShowReportFragment.
+ * @author Karl
+ *
+ */
 public interface ShowReportFragmentButtonListener {
-	void setReportType(TypeReport reportType);
-	
+	/**
+	 * Send the report type to presenter.
+	 * @param reportType type of Report. (ALL, INCOME, EXPENSE)
+	 */
+    void setReportType(TypeReport reportType);
 }

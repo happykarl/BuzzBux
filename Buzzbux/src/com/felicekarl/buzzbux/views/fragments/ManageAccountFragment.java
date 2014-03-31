@@ -1,105 +1,102 @@
 package com.felicekarl.buzzbux.views.fragments;
 
 import com.felicekarl.buzzbux.R;
-import com.felicekarl.buzzbux.listeners.*;
+import com.felicekarl.buzzbux.listeners.ManageAccountFragmentButtonListener;
+import com.felicekarl.buzzbux.listeners.UpdateManageAccountFragmentButtonListener;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
-
-public class ManageAccountFragment extends BaseFragment implements OnClickListener, UpdateManageAccountFragmentButtonListener {
-	@SuppressWarnings("unused")
-	private static final String TAG = ManageAccountFragment.class.getSimpleName();
-	
-	private ListView lv_list_account;
-	
-	private ManageAccountFragmentButtonListener mManageAccountFragmentButtonListener;
-	
-	public ManageAccountFragment() {
-		super();
-	}
-	
-	public static ManageAccountFragment create() {
-		ManageAccountFragment fragment = new ManageAccountFragment();
-		return fragment;
+/**
+ * ManageAccountFragment.
+ * @author Karl
+ *
+ */
+public class ManageAccountFragment extends AbstractBaseFragment implements OnClickListener, UpdateManageAccountFragmentButtonListener {
+	/**
+	 * Account ListView.
+	 */
+    private ListView lvListAccount;
+	/**
+	 * ManageAccountFragmentButtonListener.
+	 */
+    private ManageAccountFragmentButtonListener mManageAccountFragmentButtonListener;
+    /**
+	 * Constructor.
+	 */
+    public ManageAccountFragment() {
+        super();
+    }
+    /**
+	 * Create ManageAccountFragment instance.
+	 * @return ManageAccountFragment
+	 */
+    public static ManageAccountFragment create() {
+        ManageAccountFragment fragment = new ManageAccountFragment();
+        return fragment;
     }
 	
-	@Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
     }
 	
-	@Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		view = (ViewGroup) inflater.inflate(R.layout.fragment_manage_account, container, false);
+        view = (ViewGroup) inflater.inflate(R.layout.fragment_manage_account, container, false);
 		
-		lv_list_account = (ListView) view.findViewById(R.id.lv_list_account);
+        lvListAccount = (ListView) view.findViewById(R.id.lv_list_account);
 		
-		lv_list_account.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (mManageAccountFragmentButtonListener != null) {
-					mManageAccountFragmentButtonListener.selectAccount(position);
-				}
-			}
-		});
+        lvListAccount.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mManageAccountFragmentButtonListener != null) {
+                    mManageAccountFragmentButtonListener.selectAccount(position);
+                }
+            }
+        });
 		
     	slideUpFragment();
     	
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public void onClick(View v) {
-//		if (iView != null)	iView.closeMenu();
-//		closeVirtualKeyboard();
-//		switch(v.getId()) {
-//		
-//		}
-	}
+    @Override
+    public void onClick(View v) {
+    	
+    }
 
-	@Override
-	public void resetFragment() {
-		//enable button listener
-		enableButtonListener();
-	}
+    @Override
+    public void resetFragment() {
+        enableButtonListener();
+    }
 
-	@Override
-	public void enableButtonListener() {
-//		if (bt_list != null) {
-//			for (Button bt : bt_list) {
-//				bt.setOnClickListener(this);
-//			}
-//		}
-	}
+    @Override
+    public void enableButtonListener() {
+    	
+    }
 
-	@Override
-	public void disableButtonListener() {
-//		if (bt_list != null) {
-//			for (Button bt : bt_list) {
-//				bt.setOnClickListener(null);
-//			}
-//		}
-	}
+    @Override
+    public void disableButtonListener() {
+    	
+    }
 	
-	public ListView getListView() {
-		return lv_list_account;
-	}
+    /**
+     * Get ListView of Account.
+     * @return ListView of Account
+     */
+    public ListView getListView() {
+        return lvListAccount;
+    }
 
-	@Override
-	public void updateManageAccountFragmentButtonListener(
-			ManageAccountFragmentButtonListener mManageAccountFragmentButtonListener) {
-		this.mManageAccountFragmentButtonListener = mManageAccountFragmentButtonListener;
-	}
+    @Override
+    public void updateManageAccountFragmentButtonListener(
+			ManageAccountFragmentButtonListener pManageAccountFragmentButtonListener) {
+        mManageAccountFragmentButtonListener = pManageAccountFragmentButtonListener;
+    }
 }

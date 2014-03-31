@@ -1,6 +1,17 @@
 package com.felicekarl.buzzbux.listeners;
-
+/**
+ * Button Listener Interface for ManageTransactionFragment.
+ * @author Karl
+ *
+ */
 public interface ManageTransactionFragmentButtonListener {
-	public void selectTransaction(int position);
-	public void delete();
+	/**
+	 * send the position of transaction of currently selected account.
+	 * @param position position of transaction of currently selected account
+	 */
+    void selectTransaction(int position);
+    /**
+     * Delete currently selected Account.
+     */
+    void delete();
 }

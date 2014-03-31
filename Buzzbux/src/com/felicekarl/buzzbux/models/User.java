@@ -1,64 +1,115 @@
 package com.felicekarl.buzzbux.models;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
+/**
+ * User.
+ * @author Karl
+ *
+ */
 public class User {
-	private String username;
-	private String firstname;
-	private String lastname;
-	private ArrayList<Account> list;
-	
-	public User() {
-		this.list = new ArrayList<Account>();
-	}
-	
-	public User(String username, String firstname, String lastname) {
-		this();
-		this.username = username;
-		this.firstname = firstname;
-		this.lastname = lastname;
-	}
-	
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-	
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-	
-	public String getUsername() {
-		return this.username;
-	}
-	
-	public String getFirstname() {
-		return this.firstname;
-	}
-	
-	public String getLastName() {
-		return this.lastname;
-	}
-	
-	public void addAccount(Account item) {
-		this.list.add(item);
-	}
-	
-	public boolean removeAccount(Account item) {
-		return this.list.remove(item);
-	}
-	
-	public void removeAllAccounts() {
-		list = new ArrayList<Account>();
-	}
-	
-	public ArrayList<Account> getAccounts() {
-		return list;
-	}
+	/**
+	 * Username.
+	 */
+    private String username;
+    /**
+     * Fisrt Name.
+     */
+    private String firstname;
+    /**
+     * Last Name.
+     */
+    private String lastname;
+    /**
+     * List of Account that User holding.
+     */
+    private ArrayList<Account> list;
+	/**
+	 * Initiate List of Account.
+	 */
+    public User() {
+        this.list = new ArrayList<Account>();
+    }
+	/**
+	 * Initiate instance with following info.
+	 * @param pUsername username
+	 * @param pFirstname fisrt name
+	 * @param pLastname last name
+	 */
+    public User(String pUsername, String pFirstname, String pLastname) {
+        this();
+        username = pUsername;
+        firstname = pFirstname;
+        lastname = pLastname;
+    }
+	/**
+	 * Set Username.
+	 * @param pUsername username.
+	 */
+    public void setUsername(String pUsername) {
+        username = pUsername;
+    }
+	/**
+	 * Set First Name.
+	 * @param pFirstname fisrt name
+	 */
+    public void setFirstname(String pFirstname) {
+        firstname = pFirstname;
+    }
+	/**
+	 * Set Last Name.
+	 * @param pLastname last name
+	 */
+    public void setLastname(String pLastname) {
+        lastname = pLastname;
+    }
+	/**
+	 * Get username.
+	 * @return username
+	 */
+    public String getUsername() {
+        return this.username;
+    }
+	/**
+	 * Get First Name.
+	 * @return first name
+	 */
+    public String getFirstname() {
+        return this.firstname;
+    }
+	/**
+	 * Get Last Name.
+	 * @return last name
+	 */
+    public String getLastName() {
+        return this.lastname;
+    }
+	/**
+	 * Add Account item into the list.
+	 * @param item Account item
+	 */
+    public void addAccount(Account item) {
+        this.list.add(item);
+    }
+	/**
+	 * Delete Account from the List.
+	 * @param item Account item want to be deleted.
+	 * @return true is item is successfully deleted
+	 */
+    public boolean removeAccount(Account item) {
+        return this.list.remove(item);
+    }
+	/**
+	 * Remove all Account items in the list.
+	 */
+    public void removeAllAccounts() {
+        list = new ArrayList<Account>();
+    }
+	/**
+	 * Get All the items of Account.
+	 * @return list of Accounts
+	 */
+    public ArrayList<Account> getAccounts() {
+        return list;
+    }
 	 
 }

@@ -1,5 +1,13 @@
 package com.felicekarl.buzzbux.listeners;
-
+/**
+ * Listener for updating Button Listener Interface for ManageTransactionFragment.
+ * @author Karl
+ *
+ */
 public interface UpdateManageTransactionFragmentButtonListener {
-	public void updateManageTransactionFragmentButtonListener(ManageTransactionFragmentButtonListener mManageTransactionFragmentButtonListener);
+	/**
+	 * Update Listener.
+	 * @param mManageTransactionFragmentButtonListener Button Listener Interface for ManageTransactionFragment
+	 */
+    void updateManageTransactionFragmentButtonListener(ManageTransactionFragmentButtonListener mManageTransactionFragmentButtonListener);
 }

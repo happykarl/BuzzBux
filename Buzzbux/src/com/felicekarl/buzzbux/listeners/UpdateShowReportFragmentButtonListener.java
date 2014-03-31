@@ -1,5 +1,13 @@
 package com.felicekarl.buzzbux.listeners;
-
+/**
+ * Listener for updating Button Listener Interface for ShowReportFragment.
+ * @author Karl
+ *
+ */
 public interface UpdateShowReportFragmentButtonListener {
-	public void updateShowReportFragmentButtonListener(ShowReportFragmentButtonListener mShowReportFragmentButtonListener);
+	/**
+	 * Update Listener.
+	 * @param mShowReportFragmentButtonListener Button Listener Interface for ShowReportFragment
+	 */
+    void updateShowReportFragmentButtonListener(ShowReportFragmentButtonListener mShowReportFragmentButtonListener);
 }

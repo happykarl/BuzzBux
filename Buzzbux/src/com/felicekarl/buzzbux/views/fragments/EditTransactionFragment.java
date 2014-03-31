@@ -1,26 +1,18 @@
 package com.felicekarl.buzzbux.views.fragments;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import com.felicekarl.buzzbux.R;
-import com.felicekarl.buzzbux.listeners.*;
+import com.felicekarl.buzzbux.listeners.EditTransactionFragmentButtonListener;
+import com.felicekarl.buzzbux.listeners.UpdateEditTransactionFragmentButtonListener;
 import com.felicekarl.buzzbux.models.LocaleParser;
 import com.felicekarl.buzzbux.models.Money;
 import com.felicekarl.buzzbux.models.TransType;
 import com.felicekarl.buzzbux.models.Transaction;
-import com.felicekarl.buzzbux.views.TypeView;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.opengl.Visibility;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -28,92 +20,131 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-public class EditTransactionFragment extends BaseFragment implements OnClickListener,
-		UpdateEditTransactionFragmentButtonListener {
-	@SuppressWarnings("unused")
-	private static final String TAG = EditTransactionFragment.class.getSimpleName();
-	
+/**
+ * EditTransactionFragment.
+ * @author Karl
+ *
+ */
+public class EditTransactionFragment extends AbstractBaseFragment implements OnClickListener, UpdateEditTransactionFragmentButtonListener {
+    /**
+     * EditTransactionFragmentButtonListener.
+     */
 	private EditTransactionFragmentButtonListener mEditTransactionFragmentButtonListener;
-	
-	private EditText et_trans_amount;
-	private EditText et_trans_description;
-	private Spinner sp_trans_type;
-	private Button bt_submit;
-	private TextView tv_error;
-	private TextView tv_currency;
-	private TextView tv_month_back;
-	private TextView tv_month_next;
-	private DatePicker dp_date;
-	private Calendar calendar;
-	private Button bt_cancel;
-	private Button bt_delete;
-	private View bgLayout1;
-	private View bgLayout2;
-	private View bgLayout3;
-	private View bgLayout4;
-	
-	private Locale locale;
-	private Money amount;
-	
-	public EditTransactionFragment() {
-		super();
-	}
-	
-	public static EditTransactionFragment create() {
-		EditTransactionFragment fragment = new EditTransactionFragment();
-		return fragment;
+	/**
+	 * Transaction Amount EditText.
+	 */
+    private EditText etTransAmount;
+    /**
+     * Description EditText.
+     */
+    private EditText etTransDescription;
+    /**
+     * Dropbox Menu for Transaction Type.
+     */
+    private Spinner spTransType;
+    /**
+     * Submit Button.
+     */
+    private Button btSubmit;
+    /**
+     * Error TextView.
+     */
+    private TextView tvError;
+    /**
+     * Currency TextView.
+     */
+    private TextView tvCurrency;
+    /**
+     * DatePicker for Transaction Date.
+     */
+    private DatePicker dpDate;
+    /**
+     * Calendar to hold date.
+     */
+    private Calendar calendar;
+    /**
+     * Cancel Button.
+     */
+    private Button btCancel;
+    /**
+     * Delete Button.
+     */
+    private Button btDelete;
+    /**
+     * Background Layout.
+     */
+    private View bgLayout1;
+    /**
+     * Background Layout.
+     */
+    private View bgLayout2;
+    /**
+     * Background Layout.
+     */
+    private View bgLayout3;
+    /**
+     * Background Layout.
+     */
+    private View bgLayout4;
+    /**
+	 * Locale.
+	 */
+    private Locale locale;
+    /**
+     * Amount of Money.
+     */
+    private Money amount;
+    /**
+	 * Constructor.
+	 */
+    public EditTransactionFragment() {
+        super();
+    }
+    /**
+	 * Create EditTransactionFragment instance.
+	 * @return EditTransactionFragment
+	 */
+    public static EditTransactionFragment create() {
+        EditTransactionFragment fragment = new EditTransactionFragment();
+        return fragment;
     }
 	
-	@Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    	super.onCreate(savedInstanceState);
     }
 	
-	@Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		view = (ViewGroup) inflater.inflate(R.layout.fragment_edit_transaction, container, false);
+        view = (ViewGroup) inflater.inflate(R.layout.fragment_edit_transaction, container, false);
 		
-		et_trans_amount = (EditText) view.findViewById(R.id.et_trans_amount);
-		et_trans_description = (EditText) view.findViewById(R.id.et_trans_description);
-		sp_trans_type = (Spinner) view.findViewById(R.id.sp_trans_type);
-		bt_submit = (Button) view.findViewById(R.id.bt_submit);
-		bt_submit.setOnClickListener(this);
-    	tv_error = (TextView) view.findViewById(R.id.tv_error);
-    	tv_currency = (TextView) view.findViewById(R.id.tv_currency);
-    	bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
-    	bt_cancel.setOnClickListener(this);
-    	bt_delete = (Button) view.findViewById(R.id.bt_delete);
-    	bt_delete.setOnClickListener(this);
+        etTransAmount = (EditText) view.findViewById(R.id.et_trans_amount);
+        etTransDescription = (EditText) view.findViewById(R.id.et_trans_description);
+        spTransType = (Spinner) view.findViewById(R.id.sp_trans_type);
+        btSubmit = (Button) view.findViewById(R.id.bt_submit);
+        btSubmit.setOnClickListener(this);
+        tvError = (TextView) view.findViewById(R.id.tv_error);
+        tvCurrency = (TextView) view.findViewById(R.id.tv_currency);
+        btCancel = (Button) view.findViewById(R.id.bt_cancel);
+        btCancel.setOnClickListener(this);
+        btDelete = (Button) view.findViewById(R.id.bt_delete);
+        btDelete.setOnClickListener(this);
     	
-    	dp_date = (DatePicker) view.findViewById(R.id.dp_date);
+    	dpDate = (DatePicker) view.findViewById(R.id.dp_date);
     	
     	calendar = Calendar.getInstance();
-    	dp_date.init(calendar.get(Calendar.YEAR), 
-    			calendar.get(Calendar.MONTH), 
-    			calendar.get(Calendar.DAY_OF_MONTH), new OnDateChangedListener() {
-					@Override
-					public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-						calendar = Calendar.getInstance();
-						calendar.set(year, monthOfYear, dayOfMonth);
-		                //int dayOfMonth = cPickerDate.get(Calendar.DAY_OF_MONTH);
-					}
-    	});
-    	
-//    	long currentTimeUtc = System.currentTimeMillis();
-//		long currentTimeLocal = currentTimeUtc - TimeZone.getDefault().getOffset(currentTimeUtc);
-//		// today is Jan 14, 2013. if set daysAgo to a value larger than 36, there will be no issue.
-//		int daysAgo = 36;
-//		long minDateInMs = currentTimeLocal - 3600000L * 24 * daysAgo;
-//		
-//		DateUtils.formatDateRange(getActivity(), minDateInMs, currentTimeLocal, DateUtils.FORMAT_SHOW_DATE);
+    	dpDate.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendar = Calendar.getInstance();
+                calendar.set(year, monthOfYear, dayOfMonth);
+            }
+        });
     	
     	// add bg listener
     	bgLayout1 = view.findViewById(R.id.bgLayout1);
@@ -127,203 +158,204 @@ public class EditTransactionFragment extends BaseFragment implements OnClickList
     	
 		//view.setTranslationY(-height);
 		
-    	et_list.add(et_trans_amount);
-    	et_list.add(et_trans_description);
-    	view_list.add(bt_submit);
-    	view_list.add(bt_cancel);
-    	et_trans_amount.setFocusable(false);
-    	et_trans_description.setFocusable(false);
+    	etList.add(etTransAmount);
+    	etList.add(etTransDescription);
+    	viewList.add(btSubmit);
+    	viewList.add(btCancel);
+    	etTransAmount.setFocusable(false);
+    	etTransDescription.setFocusable(false);
     	
-    	et_trans_amount.setOnFocusChangeListener(new OnFocusChangeListener() {
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				if(hasFocus){
-					Log.d(TAG, "hasFocus");
-					if (locale != null && amount != null) {
-						Log.d(TAG, "String.valueOf(amount.getValue()): " + String.valueOf(amount.getValue()));
-						et_trans_amount.setText(String.valueOf(amount.getValue()));
-					}
-				} else {
-					Log.d(TAG, "!hasFocus");
-					if (locale != null) {
-						if ( !((EditText) v).getText().toString().equals("") ) {
-							int value = 0;
-							try {
-								value = (int) Integer.valueOf(((EditText) v).getText().toString());
-							} catch (NumberFormatException e) {
-								setErrorMsg("Please input valid range of Integer value.");
-								value = Integer.MAX_VALUE;
-							} finally {
-								amount = new Money(locale, value);
-								((EditText) v).setText(amount.toString());
-							}
-							
-						} else {
-							amount = new Money(locale, 0);
-							((EditText) v).setText(amount.toString());
-							Log.d(TAG, "amount.toString(): " + amount.toString());
-						}
-						
-					}
-				}
-			}
-		});
+        etTransAmount.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    if (locale != null && amount != null) {
+                        etTransAmount.setText(String.valueOf(amount.getValue()));
+                    }
+                } else {
+                    if (locale != null) {
+                        if ( !((EditText) v).getText().toString().equals("") ) {
+                            int value = 0;
+                            try {
+                                value = (int) Integer.valueOf(((EditText) v).getText().toString());
+                            } catch (NumberFormatException e) {
+                                setErrorMsg("Please input valid range of Integer value.");
+                                value = Integer.MAX_VALUE;
+                            } finally {
+                                amount = new Money(locale, value);
+                                ((EditText) v).setText(amount.toString());
+                            }
+                        } else {
+                            amount = new Money(locale, 0);
+                            ((EditText) v).setText(amount.toString());
+                        }
+                    }
+                }
+            }
+        });
     	
     	getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     	
     	slideUpFragment();
     	
-		return view;
-	}
-	
-	public void setErrorMsg(final String msg) {
-		if (getActivity() != null && getView() != null) {
-    		getActivity().runOnUiThread(new Runnable(){
-    			@Override
-    			public void run() {
-    				tv_error.setText(msg);
-    			}
-        	});
+        return view;
+    }
+    /**
+     * Set Error Message.
+     * @param msg error message
+     */
+    public void setErrorMsg(final String msg) {
+        if (getActivity() != null && getView() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tvError.setText(msg);
+                }
+            });
     	}
-	}
-	
-	public void setCurrency(final String currency) {
-		locale = LocaleParser.parseLocale(currency);
-		amount = new Money(locale, 0);
-		if (getActivity() != null && getView() != null) {
-    		getActivity().runOnUiThread(new Runnable(){
-    			@Override
-    			public void run() {
-    				tv_currency.setText("Amount (Currency - " + currency + ")");
-    			}
-        	});
+    }
+    /**
+     * Set Currency.
+     * @param currency currency
+     */
+    public void setCurrency(final String currency) {
+        locale = LocaleParser.parseLocale(currency);
+        amount = new Money(locale, 0);
+        if (getActivity() != null && getView() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tvCurrency.setText("Amount (Currency - " + currency + ")");
+                }
+            });
     	}
-	}
+    }
 
-	@Override
-	public void onClick(View v) {
-		if (iView != null)	iView.closeMenu();
-		closeVirtualKeyboard();
-		switch(v.getId()) {
-		case R.id.bt_submit:
-			setErrorMsg("");
-			if ( (et_trans_amount.getText().toString().trim().length() == 0) 
-		            || (et_trans_description.getText().toString().trim().length() == 0)) {
-				setErrorMsg("Please fill all blanks.");
-			}else if (mEditTransactionFragmentButtonListener != null) {
-				disableButtonListener();
-				mEditTransactionFragmentButtonListener.submit(
-						sp_trans_type.getSelectedItem().toString(), 
-						String.valueOf(amount.getValue()), 
-						et_trans_description.getText().toString().trim(),
-						calendar);
-			}
-			break;
-		case R.id.bt_cancel:
-			if (mEditTransactionFragmentButtonListener != null) {
-				disableButtonListener();
-				mEditTransactionFragmentButtonListener.cancel();
-			}
-			break;
-		case R.id.bt_delete:
-			confirmDeleteDialog();
-			break;
-		}
-	}
+    @Override
+    public void onClick(View v) {
+        if (iView != null) {
+            iView.closeMenu();
+        }
+        closeVirtualKeyboard();
+        switch(v.getId()) {
+            case R.id.bt_submit:
+                setErrorMsg("");
+                if ( (etTransAmount.getText().toString().trim().length() == 0) 
+                         || (etTransDescription.getText().toString().trim().length() == 0)) {
+                    setErrorMsg("Please fill all blanks.");
+                } else if (mEditTransactionFragmentButtonListener != null) {
+                    disableButtonListener();
+                    mEditTransactionFragmentButtonListener.submit(
+                            spTransType.getSelectedItem().toString(), 
+                            String.valueOf(amount.getValue()), 
+                            etTransDescription.getText().toString().trim(),
+                            calendar);
+                }
+                break;
+            case R.id.bt_cancel:
+                if (mEditTransactionFragmentButtonListener != null) {
+                    disableButtonListener();
+                    mEditTransactionFragmentButtonListener.cancel();
+                }
+                break;
+            case R.id.bt_delete:
+                confirmDeleteDialog();
+                break;
+        }
+    }
 
-	@Override
-	public void resetFragment() {
-		// initialize the error msg text view
-		if (getActivity() != null && getView() != null) {
-			getActivity().runOnUiThread(new Runnable(){
-				@Override
-				public void run() {
-					et_trans_amount.setText("");
-					et_trans_description.setText("");
-					tv_error.setText("");
-					tv_currency.setText("Amount");
-					sp_trans_type.setSelection(0);
+    @Override
+    public void resetFragment() {
+        if (getActivity() != null && getView() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    etTransAmount.setText("");
+                    etTransDescription.setText("");
+                    tvError.setText("");
+                    tvCurrency.setText("Amount");
+                    spTransType.setSelection(0);
 					
-					calendar = Calendar.getInstance();
-			    	dp_date.updateDate(calendar.get(Calendar.YEAR), 
-			    			calendar.get(Calendar.MONTH), 
-			    			calendar.get(Calendar.DAY_OF_MONTH));
-				}
-	    	});
-		}
-		
-		//enable button listener
-		enableButtonListener();
-	}
+                    calendar = Calendar.getInstance();
+                    dpDate.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                }
+            });
+        }
+        enableButtonListener();
+    }
 	
-	@Override
-	public void enableButtonListener() {
-		if (view_list != null) {
-			for (View v : view_list) {
-				v.setOnClickListener(this);
-			}
-		}
-	}
+    @Override
+    public void enableButtonListener() {
+        if (viewList != null) {
+            for (View v : viewList) {
+                v.setOnClickListener(this);
+            }
+        }
+    }
 	
-	@Override
-	public void disableButtonListener() {
-		if (view_list != null) {
-			for (View v : view_list) {
-				v.setOnClickListener(null);
-			}
-		}
-	}
+    @Override
+    public void disableButtonListener() {
+        if (viewList != null) {
+            for (View v : viewList) {
+                v.setOnClickListener(null);
+            }
+        }
+    }
 
-	@Override
-	public void updateEditTransactionFragmentButtonListener(
-			EditTransactionFragmentButtonListener mEditTransactionFragmentButtonListener) {
-		this.mEditTransactionFragmentButtonListener = mEditTransactionFragmentButtonListener;
-	}
-
-	public void fillEditTransactionForm(final Transaction transaction) {
-		if (getActivity() != null && getView() != null) {
-			getActivity().runOnUiThread(new Runnable(){
-				@Override
-				public void run() {
-					TransType type = transaction.getType();
-					int position = 0;
-					while (!sp_trans_type.getItemAtPosition(position).toString().equals(type.toString())) {
-						position++;
-					}
-					sp_trans_type.setSelection(position);
-					amount = transaction.getAmount();
-					Money amount = transaction.getAmount();
-					et_trans_amount.setText(amount.toString());
-					String description = transaction.getDescription();
-					et_trans_description.setText(description);
-					calendar = Calendar.getInstance();
-					calendar.setTime(transaction.getDate());
-					dp_date.updateDate(calendar.get(Calendar.YEAR), 
-			    			calendar.get(Calendar.MONTH), 
-			    			calendar.get(Calendar.DAY_OF_MONTH));
-				}
-			});
-		}
-	}
+    @Override
+    public void updateEditTransactionFragmentButtonListener(
+			EditTransactionFragmentButtonListener pEditTransactionFragmentButtonListener) {
+        mEditTransactionFragmentButtonListener = pEditTransactionFragmentButtonListener;
+    }
+    /**
+     * Fill TextView & EditText with information of Transaction.
+     * @param transaction Transaction info to be filled with
+     */
+    public void fillEditTransactionForm(final Transaction transaction) {
+        if (getActivity() != null && getView() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    TransType type = transaction.getType();
+                    int position = 0;
+                    while (!spTransType.getItemAtPosition(position).toString().equals(type.toString())) {
+                        position++;
+                    }
+                    spTransType.setSelection(position);
+                    amount = transaction.getAmount();
+                    Money amount = transaction.getAmount();
+                    etTransAmount.setText(amount.toString());
+                    String description = transaction.getDescription();
+                    etTransDescription.setText(description);
+                    calendar = Calendar.getInstance();
+                    calendar.setTime(transaction.getDate());
+                    dpDate.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                }
+            });
+        }
+    }
 	
-	private void confirmDeleteDialog(){
-		AlertDialog.Builder dialoge = new AlertDialog.Builder(getActivity());
-		dialoge.setTitle("Confirm to delete Transaction?");
-		dialoge.setPositiveButton("Delete", new android.content.DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				if (mEditTransactionFragmentButtonListener != null) {
-					disableButtonListener();
-					mEditTransactionFragmentButtonListener.delete();
-				}
-			}
-		});
-		dialoge.setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				enableButtonListener();
-			}
-		});
-		dialoge.show();
-	}
+    /**
+     * Pop-Up Confirm Dialog for deletion.
+     */
+    private void confirmDeleteDialog() {
+        AlertDialog.Builder dialoge = new AlertDialog.Builder(getActivity());
+        dialoge.setTitle("Confirm to delete Transaction?");
+        dialoge.setPositiveButton("Delete", new android.content.DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (mEditTransactionFragmentButtonListener != null) {
+                    disableButtonListener();
+                    mEditTransactionFragmentButtonListener.delete();
+                }
+            }
+        });
+        dialoge.setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                enableButtonListener();
+            }
+        });
+        dialoge.show();
+    }
 }
