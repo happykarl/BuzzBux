@@ -1,7 +1,11 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="mainTheme" parent="@android:style/Theme.NoTitleBar">
         
     </style>
+    
+    <color name="light_gray">#eee</color>
+    <color name="dark_gray">#ccc</color>
+	<color name="black">#000</color>
 
 </resources>

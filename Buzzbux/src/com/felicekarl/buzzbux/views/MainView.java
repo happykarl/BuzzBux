@@ -699,5 +699,13 @@ public class MainView implements IView {
     public View getShowReportGraphView() {
         return mShowReportFragment.getLlGraph();
     }
+	@Override
+	public void setManageReportErrorMsg(String msg) {
+		mManageReportFragment.setErrorMsg(msg);
+	}
+	@Override
+	public void drawManageUser(String username, String firstname, String lastname) {
+		mDashboardFragment.drawManageUser(username, firstname, lastname);
+	}
 
 }

@@ -8,7 +8,7 @@
     
     <FrameLayout
 	    android:layout_width="match_parent"
-	    android:layout_height="110dp"
+	    android:layout_height="wrap_content"
 	    android:background="#222"
 	    android:layout_gravity="bottom|center"
 	    android:orientation="vertical" >
@@ -26,6 +26,7 @@
 	            android:layout_width="60dp"
 	            android:layout_height="60dp"
 	            android:background="@null"
+	            android:alpha="0.5"
 	            android:drawableLeft="@drawable/bt_refresh" />
 	        
 	        <Button
@@ -54,19 +55,9 @@
 	            android:layout_width="60dp"
 	            android:layout_height="60dp"
 	            android:background="@null"
+	            android:alpha="0.5"
 	            android:drawableLeft="@drawable/bt_setting" />
 	    </LinearLayout>
-	
-	    <Button
-	        android:id="@+id/bt_footer_popup"
-	        android:layout_width="80dp"
-	        android:layout_height="110dp"
-	        android:layout_marginTop="5dp"
-	        android:paddingTop="20dp"
-	        android:paddingBottom="40dp"
-	        android:background="@null"
-	        android:layout_gravity="bottom|right"
-	        android:drawableLeft="@drawable/bt_popup" />
     </FrameLayout>
     
     

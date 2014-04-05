@@ -6,7 +6,7 @@
     android:background="#eee"
     android:orientation="vertical"
     android:paddingTop="80dp"
-    android:paddingBottom="40dp" >
+    android:paddingBottom="60dp" >
 
     <LinearLayout
         android:id="@+id/bgLayout2"
@@ -23,6 +23,7 @@
 
             <ListView
                 android:id="@+id/lv_list_account"
+                android:listSelector="@drawable/bt_light_background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null" >

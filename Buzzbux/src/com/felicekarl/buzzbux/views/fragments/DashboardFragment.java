@@ -4,11 +4,19 @@ import com.felicekarl.buzzbux.R;
 import com.felicekarl.buzzbux.listeners.DashboardFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.UpdateDashboardFragmentButtonListener;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 /**
  * DashboardFragment.
@@ -21,17 +29,33 @@ public class DashboardFragment extends AbstractBaseFragment implements OnClickLi
 	 */
     private LinearLayout llManagerUser;
     /**
+     * ImageView for ManageUser
+     */
+    private TextureView ivManageUser;
+    /**
      * Manage Account Button.
      */
     private LinearLayout llManagerAccount;
+    /**
+     * ImageView for ManageAccount
+     */
+    private ImageView ivManageAccount;
     /**
      * Report Transaction Button.
      */
     private LinearLayout llReportTransaction;
     /**
+     * ImageView for ReportTransaction
+     */
+    private ImageView ivReportTransaction;
+    /**
      * Setting Button.
      */
     private LinearLayout llSetting;
+    /**
+     * ImageView for Setting
+     */
+    private ImageView ivSetting;
 	/**
 	 * DashboardFragmentButtonListener.
 	 */
@@ -62,6 +86,11 @@ public class DashboardFragment extends AbstractBaseFragment implements OnClickLi
         llReportTransaction.setOnClickListener(this);
         llSetting = (LinearLayout) view.findViewById(R.id.ll_settings);
         llSetting.setOnClickListener(this);
+        
+        ivManageUser = (TextureView) view.findViewById(R.id.iv_manager_user);
+        ivManageAccount = (ImageView) view.findViewById(R.id.iv_manager_account);
+        ivReportTransaction = (ImageView) view.findViewById(R.id.iv_report_transaction);
+        ivSetting = (ImageView) view.findViewById(R.id.iv_settings);
 		
         viewList.add(llManagerUser);
         viewList.add(llManagerAccount);
@@ -141,5 +170,37 @@ public class DashboardFragment extends AbstractBaseFragment implements OnClickLi
             }
         }
     }
-	
+    
+    /**
+     * Draw User Info to Screen.
+     * @param username
+     * @param firstname
+     * @param lastname
+     */
+    public void drawManageUser(String username, String firstname, String lastname) {
+    	Canvas canvas = ivManageUser.lockCanvas(null);
+    	Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.image_menu5);
+    	canvas.drawBitmap(bitmap, 0, 0, null);
+    	
+    	Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    	paint.setColor(Color.parseColor("#ffffff"));
+    	paint.setShadowLayer(2f, 0f, 2f, Color.parseColor("#888888"));
+    	Rect bounds = new Rect();
+    	paint.setTextSkewX(-0.15f);
+    	
+    	paint.setTextSize(30);
+    	paint.getTextBounds(username, 0, username.length(), bounds);
+    	canvas.drawText(username, (int) ((bitmap.getWidth() - bounds.width() * 2) / 2), 50, paint);
+    	
+    	paint.setTextSize(30);
+    	paint.getTextBounds(firstname, 0, firstname.length(), bounds);
+    	int x = (int) ((bitmap.getWidth()  - bounds.width()) / 2);
+    	canvas.drawText(firstname, x, 100, paint);
+    	
+    	paint.setTextSize(30);
+    	paint.getTextBounds(lastname, 0, lastname.length(), bounds);
+    	canvas.drawText(lastname, x + firstname.length() * 20 + 5, 100, paint);
+    	
+    	ivManageUser.unlockCanvasAndPost(canvas);
+    }
 }

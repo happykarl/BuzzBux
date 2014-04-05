@@ -26,11 +26,11 @@
                 android:id="@+id/tv_date_from"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#eee"
+                android:background="@drawable/bt_light_background"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="From - "
+                android:text="▼ From - "
                 android:textColor="#000"
                 android:textSize="30sp"
                 android:textStyle="bold|italic" />
@@ -66,11 +66,11 @@
                 android:id="@+id/tv_date_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#eee"
+                android:background="@drawable/bt_light_background"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="To - "
+                android:text="▼ To - "
                 android:textColor="#000"
                 android:textSize="30sp"
                 android:textStyle="bold|italic" />
@@ -101,6 +101,28 @@
 	        android:padding="10dp"
 			android:layout_marginBottom="60dp"
 	        android:orientation="vertical" >
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="select accounts that you want to see report"
+                    android:textColor="#000"
+                    android:textSize="15sp"
+                    android:textStyle="bold|italic" />
+            
+            <TextView
+                    android:id="@+id/tv_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="error message"
+                    android:textColor="#a20025"
+                    android:textSize="15sp"
+                    android:textStyle="bold|italic" />
             
             <ListView
 	            android:id="@+id/lv_list_account"
@@ -124,7 +146,7 @@
             android:id="@+id/bt_show_report"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#eee"
+            android:background="@drawable/bt_light_background"
             android:fontFamily="sans-serif-condensed"
             android:padding="10dp"
             android:text="Show Report"

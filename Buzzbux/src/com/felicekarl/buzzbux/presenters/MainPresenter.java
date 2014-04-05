@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.felicekarl.buzzbux.R;
+import com.felicekarl.buzzbux.activities.MainActivity;
 import com.felicekarl.buzzbux.listeners.AddAccountFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.AddTransactionFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.DashboardFragmentButtonListener;
@@ -195,18 +196,30 @@ import android.widget.LinearLayout;
                 view.setTitle("Register");
             }
             @Override
-            public void submitLogIn(String username, String password) {
-                view.startSpinner();
-                if (JsonParser.parseLogIn(network.submitLogIn(username, password), view, model)) {
-                    view.setView(TypeView.DASHBOARD);
-                    view.setTitle(DASHBOARD);
-                    // save preference
-                    editor.putString(USERNAME, username);
-                    editor.commit();
-                } else {
-                    view.enablButtonListener();
-                }
-                view.stopSpinner();
+            public void submitLogIn(final String username, final String password) {
+            	view.startSpinner();
+                new Thread(new Runnable() {
+					@Override
+					public void run() {
+						if (JsonParser.parseLogIn(network.submitLogIn(username, password), view, model)) {
+							((MainActivity) context).runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									view.drawManageUser(model.getCurUser().getUsername(), model.getCurUser().getFirstname(), model.getCurUser().getLastName());
+				                    view.setView(TypeView.DASHBOARD);
+				                    view.setTitle(DASHBOARD);
+				                    // save preference
+				                    editor.putString(USERNAME, username);
+				                    editor.commit();
+								}
+							});
+		                } else {
+		                    view.enablButtonListener();
+		                }
+						view.stopSpinner();
+					}
+                	
+                }).start();
             }
         });
     }
@@ -217,18 +230,23 @@ import android.widget.LinearLayout;
         /* RegisterFragment button click listeners */
         view.updateRegisterFragmentButtonListener(new RegisterFragmentButtonListener() {
             @Override
-            public void submitRegister(User pUser, String pPassword) {
+            public void submitRegister(final User pUser, final String pPassword) {
             	view.startSpinner();
-                if (JsonParser.parseRegister(network.submitRegister(pUser, pPassword), view, model)) {
-                    view.setView(TypeView.DASHBOARD);
-                    view.setTitle(DASHBOARD);
-                    // save preference
-                    editor.putString(USERNAME, pUser.getUsername());
-                    editor.commit();
-                } else {
-                    view.enablButtonListener();
-                }
-                view.stopSpinner();
+            	new Thread(new Runnable() {
+					@Override
+					public void run() {
+						if (JsonParser.parseRegister(network.submitRegister(pUser, pPassword), view, model)) {
+		                    view.setView(TypeView.DASHBOARD);
+		                    view.setTitle(DASHBOARD);
+		                    // save preference
+		                    editor.putString(USERNAME, pUser.getUsername());
+		                    editor.commit();
+		                } else {
+		                    view.enablButtonListener();
+		                }
+		                view.stopSpinner();
+					}
+            	}).start();
             }
             @Override
             public void cancel() {
@@ -254,44 +272,64 @@ import android.widget.LinearLayout;
             @Override
             public void submitManageAccount() {
                 view.startSpinner();
-                if (JsonParser.parseAccounts(network.getAccounts(
-                	    model.getCurUser().getUsername()), view, model)) {
-                    // update list
-                    Collections.sort(model.getCurUserAccounts());
-                    // import transactions for each account
-                    for (Account a : model.getCurUserAccounts()) {
-                        if (JsonParser.parseTransactions(a, network.getTransactions(a.getId()), view, model)) {
-                            // update list
-                            Collections.sort(a.getList());
-                        }
-                    }
-                    view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
-							context, R.layout.fragment_manage_account_item, 
-							model.getCurUserAccounts()));
-                    view.setView(TypeView.MANAGEACCOUNT);
-                    view.setTitle(MANAGEACCOUNT);
-                } else {
-                    view.enablButtonListener();
-                }
-                view.stopSpinner();
+                new Thread(new Runnable() {
+					@Override
+					public void run() {
+						if (JsonParser.parseAccounts(network.getAccounts(
+		                	    model.getCurUser().getUsername()), view, model)) {
+		                    // update list
+		                    Collections.sort(model.getCurUserAccounts());
+		                    // import transactions for each account
+		                    for (Account a : model.getCurUserAccounts()) {
+		                        if (JsonParser.parseTransactions(a, network.getTransactions(a.getId()), view, model)) {
+		                            // update list
+		                            Collections.sort(a.getList());
+		                        }
+		                    }
+		                    ((MainActivity) context).runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
+											context, R.layout.fragment_manage_account_item, 
+											model.getCurUserAccounts()));
+									view.setView(TypeView.MANAGEACCOUNT);
+				                    view.setTitle(MANAGEACCOUNT);
+								}
+							});
+		                } else {
+		                    view.enablButtonListener();
+		                }
+		                view.stopSpinner();
+					}
+                }).start();
             }
             @SuppressWarnings("unchecked")
             @Override
             public void submitReportTransaction() {
                 view.startSpinner();
-                if (JsonParser.parseAccounts(network.getAccounts(
-						model.getCurUser().getUsername()), view, model)) {
-					// update list
-                    Collections.sort(model.getCurUserAccounts());
-                    view.getManageReportListView().setAdapter(new ArrayAdapterAccountItem(
-							context, R.layout.fragment_manage_report_item, 
-							model.getCurUserAccounts()));
-                    view.setView(TypeView.MANAGEREPORT);
-                    view.setTitle("Manage Report");
-                } else {
-                    view.enablButtonListener();
-                }
-                view.stopSpinner();
+                new Thread(new Runnable() {
+					@Override
+					public void run() {
+						if (JsonParser.parseAccounts(network.getAccounts(
+								model.getCurUser().getUsername()), view, model)) {
+							// update list
+		                    Collections.sort(model.getCurUserAccounts());
+		                    ((MainActivity) context).runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									view.getManageReportListView().setAdapter(new ArrayAdapterAccountItem(
+											context, R.layout.fragment_manage_report_item, 
+											model.getCurUserAccounts()));
+				                    view.setView(TypeView.MANAGEREPORT);
+				                    view.setTitle("Manage Report");
+								}
+		                    });
+		                } else {
+		                    view.enablButtonListener();
+		                }
+		                view.stopSpinner();
+					}
+                }).start();
             }
             @Override
             public void submitSettings() {
@@ -307,28 +345,38 @@ import android.widget.LinearLayout;
         view.updateManageAccountFragmentButtonListener(new ManageAccountFragmentButtonListener() {
             @SuppressWarnings("unchecked")
             @Override
-            public void selectAccount(int position) {
+            public void selectAccount(final int position) {
                 view.startSpinner();
-				// set cur account as selected one
-                Account account = model.getCurUser().getList().get(position);
-                model.setCurAccount(account);
-				// reset cur transaction as null
-                model.setCurTransaction(null);
-                if (JsonParser.parseTransactions(network.getTransactions(account.getId()), view, model)) {
-					// update list
-                    Collections.sort(model.getCurAccount().getList());
-                    view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
-							context, R.layout.fragment_manage_transaction_item, 
-							model.getCurAccount().getList()));
-					// update balance in ManageTransaction view
-                    view.setManageTransactionBalance(model.getCurAccount().getBalance().toString());
-					// change view
-                    view.setView(TypeView.MANAGETRANSACTION);
-                    view.setTitle(model.getCurAccount().getName());
-                } else {
-                    view.enablButtonListener();
-                }
-                view.stopSpinner();
+                new Thread(new Runnable() {
+					@Override
+					public void run() {
+						// set cur account as selected one
+		                Account account = model.getCurUser().getList().get(position);
+		                model.setCurAccount(account);
+						// reset cur transaction as null
+		                model.setCurTransaction(null);
+		                if (JsonParser.parseTransactions(network.getTransactions(account.getId()), view, model)) {
+							// update list
+		                    Collections.sort(model.getCurAccount().getList());
+		                    ((MainActivity) context).runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
+											context, R.layout.fragment_manage_transaction_item, 
+											model.getCurAccount().getList()));
+									// update balance in ManageTransaction view
+				                    view.setManageTransactionBalance(model.getCurAccount().getBalance().toString());
+									// change view
+				                    view.setView(TypeView.MANAGETRANSACTION);
+				                    view.setTitle(model.getCurAccount().getName());
+								}
+		                    });
+		                } else {
+		                    view.enablButtonListener();
+		                }
+		                view.stopSpinner();
+					}
+                }).start();
             }
         });
     }
@@ -340,21 +388,31 @@ import android.widget.LinearLayout;
         view.updateAddAccountFragmentButtonListener(new AddAccountFragmentButtonListener() {
             @SuppressWarnings("unchecked")
             @Override
-            public void submit(String accountName, String accountDescription, String currency) {
+            public void submit(final String accountName, final String accountDescription, final String currency) {
                 view.startSpinner();
-                Account account = new Account(null, accountName, accountDescription, LocaleParser.parseLocale(currency), 0);
-                if (JsonParser.parseAddAccount(network.addAccount(model.getCurUser().getUsername(), account), view, model)) {
-					// update list
-                    Collections.sort(model.getCurUserAccounts());
-                    view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
-							context, R.layout.fragment_manage_account_item, 
-							model.getCurUserAccounts()));
-                    view.setView(TypeView.MANAGEACCOUNT);
-                    view.setTitle(MANAGEACCOUNT);
-                } else {
-                    view.enablButtonListener();
-                }
-                view.stopSpinner();
+                new Thread(new Runnable() {
+					@Override
+					public void run() {
+						Account account = new Account(null, accountName, accountDescription, LocaleParser.parseLocale(currency), 0);
+		                if (JsonParser.parseAddAccount(network.addAccount(model.getCurUser().getUsername(), account), view, model)) {
+							// update list
+		                    Collections.sort(model.getCurUserAccounts());
+		                    ((MainActivity) context).runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
+											context, R.layout.fragment_manage_account_item, 
+											model.getCurUserAccounts()));
+				                    view.setView(TypeView.MANAGEACCOUNT);
+				                    view.setTitle(MANAGEACCOUNT);
+								}
+		                    });
+		                } else {
+		                    view.enablButtonListener();
+		                }
+		                view.stopSpinner();
+					}
+                }).start();
             }
             @Override
             public void cancel() {
@@ -371,33 +429,43 @@ import android.widget.LinearLayout;
         view.updateAddTransactionFragmentButtonListener(new AddTransactionFragmentButtonListener() {
             @SuppressWarnings("unchecked")
             @Override
-            public void submit(String transType, String amount, String description, Calendar calendar) {
+            public void submit(final String transType, final String amount, final String description, final Calendar calendar) {
                 view.startSpinner();
-                TransType type = TransTypeParser.parseTransType(transType);
-                Money money = new Money(model.getCurAccount().getLocale(), (int) Integer.valueOf(amount));
-                Transaction transaction = new Transaction(null, type, description, money, calendar.getTime());
-                if (JsonParser.parseAddTransaction(network.addTransaction(
-						model.getCurAccount().getId(), TransTypeParser.parseSign(type), transaction), view, model)) {
-                    Collections.sort(model.getCurAccount().getList());
-                    view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
-							context, R.layout.fragment_manage_transaction_item, 
-							model.getCurAccount().getList()));
-					
-                    Money balance = new Money(model.getCurAccount().getLocale(), 
-							(int) Integer.valueOf(network.getBalance(model.getCurAccount().getId())));
-                    model.getCurAccount().setBalance(balance);
-                    view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
-							context, R.layout.fragment_manage_account_item, 
-							model.getCurUserAccounts()));
-					// update balance in ManageTransaction view
-                    view.setManageTransactionBalance(balance.toString());
-					// change view
-                    view.setView(TypeView.MANAGETRANSACTION);
-                    view.setTitle(model.getCurAccount().getName());
-                } else {
-                    view.enablButtonListener();
-                }
-                view.stopSpinner();
+                new Thread(new Runnable() {
+					@Override
+					public void run() {
+						TransType type = TransTypeParser.parseTransType(transType);
+		                Money money = new Money(model.getCurAccount().getLocale(), (int) Integer.valueOf(amount));
+		                Transaction transaction = new Transaction(null, type, description, money, calendar.getTime());
+		                if (JsonParser.parseAddTransaction(network.addTransaction(
+								model.getCurAccount().getId(), TransTypeParser.parseSign(type), transaction), view, model)) {
+		                    Collections.sort(model.getCurAccount().getList());
+		                    ((MainActivity) context).runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
+											context, R.layout.fragment_manage_transaction_item, 
+											model.getCurAccount().getList()));
+									
+				                    Money balance = new Money(model.getCurAccount().getLocale(), 
+											(int) Integer.valueOf(network.getBalance(model.getCurAccount().getId())));
+				                    model.getCurAccount().setBalance(balance);
+				                    view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
+											context, R.layout.fragment_manage_account_item, 
+											model.getCurUserAccounts()));
+									// update balance in ManageTransaction view
+				                    view.setManageTransactionBalance(balance.toString());
+									// change view
+				                    view.setView(TypeView.MANAGETRANSACTION);
+				                    view.setTitle(model.getCurAccount().getName());
+								}
+		                    });
+		                } else {
+		                    view.enablButtonListener();
+		                }
+		                view.stopSpinner();
+					}
+                }).start();
             }
             @Override
             public void cancel() {
@@ -421,21 +489,31 @@ import android.widget.LinearLayout;
             @Override
             public void delete() {
                 view.startSpinner();
-                String result = network.deleteAccount(model.getCurAccount().getId());
-                if (result.toLowerCase(Locale.US).equals("succeed")) {
-                    model.deleteAccount(model.getCurUser(), model.getCurAccount());
-                    model.setCurAccount(null);
-					// update account list
-                    Collections.sort(model.getCurUserAccounts());
-                    view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
-							context, R.layout.fragment_manage_account_item, 
-							model.getCurUserAccounts()));
-                    view.setView(TypeView.MANAGEACCOUNT);
-                    view.setTitle(MANAGEACCOUNT);
-                } else {
-                    view.enablButtonListener();
-                }
-                view.stopSpinner();
+                new Thread(new Runnable() {
+					@Override
+					public void run() {
+						String result = network.deleteAccount(model.getCurAccount().getId());
+		                if (result.toLowerCase(Locale.US).equals("succeed")) {
+		                    model.deleteAccount(model.getCurUser(), model.getCurAccount());
+		                    model.setCurAccount(null);
+							// update account list
+		                    Collections.sort(model.getCurUserAccounts());
+		                    ((MainActivity) context).runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
+											context, R.layout.fragment_manage_account_item, 
+											model.getCurUserAccounts()));
+				                    view.setView(TypeView.MANAGEACCOUNT);
+				                    view.setTitle(MANAGEACCOUNT);
+								}
+		                    });
+		                } else {
+		                    view.enablButtonListener();
+		                }
+		                view.stopSpinner();
+					}
+                }).start();
             }
         });
     }
@@ -447,48 +525,58 @@ import android.widget.LinearLayout;
         view.updateEditTransactionFragmentButtonListener(new EditTransactionFragmentButtonListener() {
             @SuppressWarnings("unchecked")
             @Override
-            public void submit(String transType, String amount, String description, Calendar calendar) {
+            public void submit(final String transType, final String amount, final String description, final Calendar calendar) {
                 view.startSpinner();
-                TransType type = TransTypeParser.parseTransType(transType);
-                SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
-                String date = sdf.format(calendar.getTime());
+                new Thread(new Runnable() {
+					@Override
+					public void run() {
+						TransType type = TransTypeParser.parseTransType(transType);
+		                SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
+		                String date = sdf.format(calendar.getTime());
 
-                String prevType = TransTypeParser.parseSign(model.getCurTransaction().getType());
-                int prevAmount = model.getCurTransaction().getAmount().getValue();
-                if (prevType.equals(ONE)) {
-                    prevAmount *= -1;
-                }
-                String newType = TransTypeParser.parseSign(type);
-                int newAmount = (int) Integer.valueOf(amount);
-                if (newType.equals(ONE)) {
-                    newAmount *= -1;
-                }
-				
-                String diff = String.valueOf(newAmount - prevAmount);
-                Money money = new Money(model.getCurAccount().getLocale(), (int) Integer.valueOf(amount));
-            	Transaction transaction = new Transaction(model.getCurTransaction().getIndex(), type, description, money, calendar.getTime());
-                if (JsonParser.parseEditTransaction(network.editTransaction(model.getCurAccount().getId(), diff, transaction), view, model)) {
-					// update transaction list
-                    Collections.sort(model.getCurAccount().getList());
-                    view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
-							context, R.layout.fragment_manage_transaction_item, 
-							model.getCurAccount().getList()));
-					// update balance
-                    Money balance = new Money(model.getCurAccount().getLocale(), 
-							(int) Integer.valueOf(network.getBalance(model.getCurAccount().getId())));
-                    model.getCurAccount().setBalance(balance);
-                    view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
-							context, R.layout.fragment_manage_account_item, 
-							model.getCurUserAccounts()));
-					// update balance in ManageTransaction view
-                    view.setManageTransactionBalance(balance.toString());
-					// change view
-                    view.setView(TypeView.MANAGETRANSACTION);
-                    view.setTitle(model.getCurAccount().getName());
-                } else {
-                    view.enablButtonListener();
-                }
-                view.stopSpinner();
+		                String prevType = TransTypeParser.parseSign(model.getCurTransaction().getType());
+		                int prevAmount = model.getCurTransaction().getAmount().getValue();
+		                if (prevType.equals(ONE)) {
+		                    prevAmount *= -1;
+		                }
+		                String newType = TransTypeParser.parseSign(type);
+		                int newAmount = (int) Integer.valueOf(amount);
+		                if (newType.equals(ONE)) {
+		                    newAmount *= -1;
+		                }
+						
+		                String diff = String.valueOf(newAmount - prevAmount);
+		                Money money = new Money(model.getCurAccount().getLocale(), (int) Integer.valueOf(amount));
+		            	Transaction transaction = new Transaction(model.getCurTransaction().getIndex(), type, description, money, calendar.getTime());
+		                if (JsonParser.parseEditTransaction(network.editTransaction(model.getCurAccount().getId(), diff, transaction), view, model)) {
+							// update transaction list
+		                    Collections.sort(model.getCurAccount().getList());
+		                    ((MainActivity) context).runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
+											context, R.layout.fragment_manage_transaction_item, 
+											model.getCurAccount().getList()));
+									// update balance
+				                    Money balance = new Money(model.getCurAccount().getLocale(), 
+											(int) Integer.valueOf(network.getBalance(model.getCurAccount().getId())));
+				                    model.getCurAccount().setBalance(balance);
+				                    view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
+											context, R.layout.fragment_manage_account_item, 
+											model.getCurUserAccounts()));
+									// update balance in ManageTransaction view
+				                    view.setManageTransactionBalance(balance.toString());
+									// change view
+				                    view.setView(TypeView.MANAGETRANSACTION);
+				                    view.setTitle(model.getCurAccount().getName());
+								}
+		                    });
+		                } else {
+		                    view.enablButtonListener();
+		                }
+		                view.stopSpinner();
+					}
+                }).start();
             }
             @Override
             public void cancel() {
@@ -499,40 +587,50 @@ import android.widget.LinearLayout;
             @Override
             public void delete() {
                 view.startSpinner();
-                String prevType = TransTypeParser.parseSign(model.getCurTransaction().getType());
-                int prevAmount = model.getCurTransaction().getAmount().getValue();
-                if (prevType.equals(ONE)) {
-                    prevAmount *= -1;
-                }
-                String diff = String.valueOf(0 - prevAmount);
-                try {
-                    int value = (int) Integer.valueOf(network.deleteTransaction(model.getCurTransaction().getIndex(), 
-							model.getCurAccount().getId(), diff));
-                    if ( model.deleteTransaction(model.getCurAccount(), model.getCurTransaction()) ) {
-						// update transaction list
-                        Collections.sort(model.getCurAccount().getList());
-                        view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
-								context, R.layout.fragment_manage_transaction_item, 
-								model.getCurAccount().getList()));
-						// update balance
-                        Money balance = new Money(model.getCurAccount().getLocale(), value);
-                        model.getCurAccount().setBalance(balance);
-                        view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
-								context, R.layout.fragment_manage_account_item, 
-								model.getCurUserAccounts()));
-						// update balance in ManageTransaction view
-                        view.setManageTransactionBalance(balance.toString());
-						
-						// reset model as null
-                        model.setCurTransaction(null);
-						// change view
-                        view.setView(TypeView.MANAGETRANSACTION);
-                        view.setTitle(model.getCurAccount().getName());
-                    }
-                } catch (NumberFormatException e) {
-                    view.enablButtonListener();
-                }
-                view.stopSpinner();
+                new Thread(new Runnable() {
+					@Override
+					public void run() {
+						String prevType = TransTypeParser.parseSign(model.getCurTransaction().getType());
+		                int prevAmount = model.getCurTransaction().getAmount().getValue();
+		                if (prevType.equals(ONE)) {
+		                    prevAmount *= -1;
+		                }
+		                String diff = String.valueOf(0 - prevAmount);
+		                try {
+		                    final int value = (int) Integer.valueOf(network.deleteTransaction(model.getCurTransaction().getIndex(), 
+									model.getCurAccount().getId(), diff));
+		                    if ( model.deleteTransaction(model.getCurAccount(), model.getCurTransaction()) ) {
+								// update transaction list
+		                        Collections.sort(model.getCurAccount().getList());
+		                        ((MainActivity) context).runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										view.getManageTransactionListView().setAdapter(new ArrayAdapterTransactionItem(
+												context, R.layout.fragment_manage_transaction_item, 
+												model.getCurAccount().getList()));
+										// update balance
+				                        Money balance = new Money(model.getCurAccount().getLocale(), value);
+				                        model.getCurAccount().setBalance(balance);
+				                        view.getManageAccountListView().setAdapter(new ArrayAdapterAccountGraphItem(
+												context, R.layout.fragment_manage_account_item, 
+												model.getCurUserAccounts()));
+										// update balance in ManageTransaction view
+				                        view.setManageTransactionBalance(balance.toString());
+										
+										// reset model as null
+				                        model.setCurTransaction(null);
+										// change view
+				                        view.setView(TypeView.MANAGETRANSACTION);
+				                        view.setTitle(model.getCurAccount().getName());
+									}
+		                        });
+		                    }
+		                } catch (NumberFormatException e) {
+		                    view.enablButtonListener();
+		                }
+		                view.stopSpinner();
+					}
+                }).start();
             }
         });
     }
@@ -544,63 +642,74 @@ import android.widget.LinearLayout;
         view.updateManageReportFragmentButtonListener(new ManageReportFragmentButtonListener() {
             @SuppressWarnings("unchecked")
             @Override
-            public void submit(List<Integer> selectedItemPosition, Calendar dateFrom, Calendar dateTo) {
+            public void submit(final List<Integer> selectedItemPosition, final Calendar dateFrom, final Calendar dateTo) {
                 view.startSpinner();
-                List<Integer> idList = new ArrayList<Integer>(); 
-                for (Integer i : selectedItemPosition) {
-                    idList.add(Integer.valueOf(model.getCurUser().getList().get(i).getId()));
-                }
-                SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
-                if (JsonParser.parseReport(network.getTransactions(idList, sdf.format(dateFrom.getTime()), sdf.format(dateTo.getTime())), view, model)) {
-                    // update transaction list
-                    Collections.sort(model.getReportTransactions());
-                    view.getShowReportListView().setAdapter(new ArrayAdapterTransactionItem(
-							context, R.layout.fragment_manage_transaction_item, 
-							model.getReportTransactions()));
-					// calculate amount
-                    int total = 0;
-                    for (Transaction t : model.getReportTransactions()) {
-                        total += t.getSignedValue();
-                    }
-					// TODO: Hard coded locale
-                    Money amount = new Money(Locale.US, total);
-                    view.setShowReportAmount(amount.toString());
-					
-					// update Graph
-                    LinearLayout graphFrame = (LinearLayout) view.getShowReportGraphView();
-                    graphFrame.removeAllViews();
-                    if (model.getReportTransactions().size() > 0) {
-                        GraphDataParser gParser = new GraphDataParser();
-                        GraphViewSeries graphData = gParser.parseTransactionData(model.getReportTransactions());
-                        LineGraphView graphView = new LineGraphView(context, ALLTRANSACTIONS);
-                        graphView.getGraphViewStyle().setTextSize(10);
-                        graphView.getGraphViewStyle().setNumHorizontalLabels(5);
-                        graphView.setDrawDataPoints(true);
-                        graphView.setDataPointsRadius(5f);
-                        graphView.addSeries(graphData);
-                        graphFrame.addView(graphView);
-						
-                        graphView.setCustomLabelFormatter(new CustomLabelFormatter() {
-                            @Override
-                            public String formatLabel(double value, boolean isValueX) {
-                                if (isValueX) {
-                                    Calendar calendar = Calendar.getInstance();
-                                    calendar.setTimeInMillis((long) value);
-                                    SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
-                                    String date = sdf.format(calendar.getTime());
-                                    return date;
-                                }
-                                return null;
-                            }
-                        });
-                    }
-					// change view
-                    view.setView(TypeView.SHOWREPORT);
-                    view.setTitle("Report");
-                } else {
-                    view.enablButtonListener();
-                }
-                view.stopSpinner();
+                new Thread(new Runnable() {
+					@Override
+					public void run() {
+						List<Integer> idList = new ArrayList<Integer>(); 
+		                for (Integer i : selectedItemPosition) {
+		                    idList.add(Integer.valueOf(model.getCurUser().getList().get(i).getId()));
+		                }
+		                SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
+		                if (JsonParser.parseReport(network.getTransactions(idList, sdf.format(dateFrom.getTime()), sdf.format(dateTo.getTime())), view, model)) {
+		                    // update transaction list
+		                    Collections.sort(model.getReportTransactions());
+		                    ((MainActivity) context).runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									view.getShowReportListView().setAdapter(new ArrayAdapterTransactionItem(
+											context, R.layout.fragment_manage_transaction_item, 
+											model.getReportTransactions()));
+									// calculate amount
+				                    int total = 0;
+				                    for (Transaction t : model.getReportTransactions()) {
+				                        total += t.getSignedValue();
+				                    }
+									// TODO: Hard coded locale
+				                    Money amount = new Money(Locale.US, total);
+				                    view.setShowReportAmount(amount.toString());
+									
+									// update Graph
+				                    LinearLayout graphFrame = (LinearLayout) view.getShowReportGraphView();
+				                    graphFrame.removeAllViews();
+				                    if (model.getReportTransactions().size() > 0) {
+				                        GraphDataParser gParser = new GraphDataParser();
+				                        GraphViewSeries graphData = gParser.parseTransactionData(model.getReportTransactions());
+				                        LineGraphView graphView = new LineGraphView(context, ALLTRANSACTIONS);
+				                        graphView.getGraphViewStyle().setTextSize(10);
+				                        graphView.getGraphViewStyle().setNumHorizontalLabels(5);
+				                        graphView.setDrawDataPoints(true);
+				                        graphView.setDataPointsRadius(5f);
+				                        graphView.addSeries(graphData);
+				                        graphFrame.addView(graphView);
+										
+				                        graphView.setCustomLabelFormatter(new CustomLabelFormatter() {
+				                            @Override
+				                            public String formatLabel(double value, boolean isValueX) {
+				                                if (isValueX) {
+				                                    Calendar calendar = Calendar.getInstance();
+				                                    calendar.setTimeInMillis((long) value);
+				                                    SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
+				                                    String date = sdf.format(calendar.getTime());
+				                                    return date;
+				                                }
+				                                return null;
+				                            }
+				                        });
+				                    }
+									// change view
+				                    view.setView(TypeView.SHOWREPORT);
+				                    view.setTitle("Report");
+								}
+		                    });
+		                } else {
+		                	view.setManageReportErrorMsg("There is no trasaction to show on report.");
+		                    view.enablButtonListener();
+		                }
+		                view.stopSpinner();
+					}
+                }).start();
             }
         });
     }

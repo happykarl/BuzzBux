@@ -101,7 +101,6 @@
                         android:fontFamily="sans-serif"
                         android:inputType="textPassword"
                         android:padding="15dp"
-                        android:text="pass123"
                         android:textColor="#000"
                         android:textSize="20sp" >
 
@@ -121,7 +120,7 @@
                         android:id="@+id/bt_login"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#eee"
+                        android:background="@drawable/bt_light_background"
                         android:fontFamily="sans-serif-condensed"
                         android:padding="10dp"
                         android:text="Log-In"
@@ -154,7 +153,7 @@
                         android:id="@+id/bt_register"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#eee"
+                        android:background="@drawable/bt_light_background"
                         android:fontFamily="sans-serif-condensed"
                         android:padding="10dp"
                         android:text="Register"

@@ -78,6 +78,11 @@ public interface IView  extends UpdateLogInFragmentButtonListener,
 	 */
     void setAddTransactionErrorMsg(String msg);
     /**
+     * Set Error Message on ManageReport Fragment.
+     * @param msg
+     */
+    void setManageReportErrorMsg(String msg);
+    /**
      * Set Current of Transaction.
      * @param currency currency
      */
@@ -131,5 +136,12 @@ public interface IView  extends UpdateLogInFragmentButtonListener,
      * @param currency currency of account
      */
     void setEditTransactionCurrency(String currency);
+    /**
+     * Draw User Info into Manage USer Button TextureView
+     * @param username
+     * @param firstname
+     * @param lastname
+     */
+    void drawManageUser(String username, String firstname, String lastname);
 	
 }

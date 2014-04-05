@@ -24,10 +24,6 @@ public class FooterFragment extends AbstractBaseFragment implements OnClickListe
      */
     private boolean isOpen = false;
     /**
-     * Pop-Up Button.
-     */
-    private Button btFooterPopup;
-    /**
      * Add Button.
      */
     private Button btFooterAdd;
@@ -66,9 +62,7 @@ public class FooterFragment extends AbstractBaseFragment implements OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = (ViewGroup) inflater.inflate(R.layout.fragment_footer, container, false);
-		
-        btFooterPopup = (Button) view.findViewById(R.id.bt_footer_popup);
-        btFooterPopup.setOnClickListener(this);
+        
         btFooterAdd = (Button) view.findViewById(R.id.bt_footer_add);
         btFooterAdd.setOnClickListener(this);
         btFooterEdit = (Button) view.findViewById(R.id.bt_footer_edit);
@@ -76,16 +70,16 @@ public class FooterFragment extends AbstractBaseFragment implements OnClickListe
         btFooterDelete = (Button) view.findViewById(R.id.bt_footer_delete);
         btFooterDelete.setOnClickListener(this);
 		
-        btFooterDelete.setVisibility(View.INVISIBLE);
+//        btFooterDelete.setVisibility(View.INVISIBLE);
+        btFooterDelete.setAlpha(0.5f);
 		
-        viewList.add(btFooterPopup);
         viewList.add(btFooterAdd);
 		
         slideUpFragment();
     	
         return view;
     }
-	
+	/*
     @Override
     public void toggle(boolean isOnStage, boolean isAnimation, DIRECTION direction) {
         this.isOnStage = isOnStage;
@@ -145,6 +139,7 @@ public class FooterFragment extends AbstractBaseFragment implements OnClickListe
             disableEditText();
     	}
     }
+    */
 	
     @Override
     protected void enableEditText() {
@@ -165,9 +160,6 @@ public class FooterFragment extends AbstractBaseFragment implements OnClickListe
     public void onClick(View v) {
         closeVirtualKeyboard();
         switch(v.getId()) {
-            case R.id.bt_footer_popup:
-                toogleMenu();
-                break;
             case R.id.bt_footer_add:
                 if (mFooterFragmentButtonListener != null) {
                     mFooterFragmentButtonListener.addItem();
@@ -186,6 +178,7 @@ public class FooterFragment extends AbstractBaseFragment implements OnClickListe
      * Toggle Footer Menu.
      */
     private void toogleMenu() {
+    	/*
         if (isOnStage) {
             if (!isOpen) {
                 if (getActivity() != null && getView() != null) {
@@ -209,6 +202,7 @@ public class FooterFragment extends AbstractBaseFragment implements OnClickListe
                 }
             }
         }
+        */
     }
 	
     /**
@@ -232,6 +226,7 @@ public class FooterFragment extends AbstractBaseFragment implements OnClickListe
      * Close Menu.
      */
     public void closeMenu() {
+    	/*
         if (isOpen) {
             if (getActivity() != null && getView() != null) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -243,6 +238,7 @@ public class FooterFragment extends AbstractBaseFragment implements OnClickListe
                 });
             }
         }
+        */
     }
 
     @Override

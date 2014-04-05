@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+
 import com.felicekarl.buzzbux.R;
 import com.felicekarl.buzzbux.listeners.ManageReportFragmentButtonListener;
 import com.felicekarl.buzzbux.listeners.UpdateManageReportFragmentButtonListener;
+
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -35,11 +37,11 @@ import android.widget.DatePicker.OnDateChangedListener;
 	/**
      * String "From -".
      */
-    private static final String FROM = "From -";
+    private static final String FROM = "▼ From -";
     /**
      * String "To -".
      */
-    private static final String TO = "To -";
+    private static final String TO = "▼ To -";
 	/**
 	 * ListView of Account.
 	 */
@@ -109,6 +111,10 @@ import android.widget.DatePicker.OnDateChangedListener;
 	 */
     private ManageReportFragmentButtonListener mManageReportFragmentButtonListener;
     /**
+     * Error TextView.
+     */
+    private TextView tvError;
+    /**
 	 * Constructor.
 	 */
     public ManageReportFragment() {
@@ -143,7 +149,7 @@ import android.widget.DatePicker.OnDateChangedListener;
         dpDateTo = (DatePicker) view.findViewById(R.id.dp_date_to);
         btShowReport = (Button) view.findViewById(R.id.bt_show_report);
         btShowReport.setOnClickListener(this);
-		
+        tvError = (TextView) view.findViewById(R.id.tv_error);
         dateFrom = Calendar.getInstance();
         dateTo = Calendar.getInstance();
 		
@@ -201,6 +207,21 @@ import android.widget.DatePicker.OnDateChangedListener;
     	slideUpFragment();
     	
         return view;
+    }
+    
+    /**
+     * Set Error Message.
+     * @param msg error message
+     */
+    public void setErrorMsg(final String msg) {
+        if (getActivity() != null && getView() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tvError.setText(msg);
+                }
+            });
+    	}
     }
 
     @Override
@@ -268,10 +289,13 @@ import android.widget.DatePicker.OnDateChangedListener;
                 break;
             case R.id.bt_show_report:
                 if (mManageReportFragmentButtonListener != null) {
+                	setErrorMsg("");
                     if (selectedItemPosition.size() > 0) {
                         disableButtonListener();
                         Collections.sort(selectedItemPosition);
                         mManageReportFragmentButtonListener.submit(selectedItemPosition, dateFrom, dateTo);
+                    } else {
+                    	setErrorMsg("There is no trasaction to show on report.");
                     }
                 }
                 resetDatePicker();
@@ -318,6 +342,14 @@ import android.widget.DatePicker.OnDateChangedListener;
     @Override
     public void resetFragment() {
         enableButtonListener();
+        if (getActivity() != null && getView() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tvError.setText("");
+                }
+            });
+    	}
     }
 
     @Override
